@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string.h> 
 #include <sys/wait.h>
+#include <sys/types.h>
 #include <vector>
 
 using namespace std;
@@ -22,9 +23,9 @@ void outhostname(){
 		}
 }
 
-//check for comments,
-//single & or |
-//make && and || work
+//check for comments,							DONE
+//single & or |									DONE
+//make && and || work							DONE
 //other test cases? - check the README
 //oh yeah do the readme
 //do the makefile
@@ -37,34 +38,42 @@ int main(int argc, char* argv[]){
 		string userinput, inputBlock, connector;
 		getline(cin, userinput);
 		unsigned int pf = 0;
+		bool first = true;
+		int fd[2];
+		int prevflag = 0;
 	
 		while(!userinput.empty()){
 			unsigned int here;
-			unsigned int flag = 0;
+			unsigned int flag = 0;	
+
+		if(userinput.find_first_of("#") != string::npos){
+			userinput = userinput.substr(0, userinput.find_first_of("#"));
+		}
 
 		if(userinput.find_first_of(";&|") != string::npos){
 			here = userinput.find_first_of(";&|");
-		if(userinput.at(here) == ';'){
-				flag = 3;
-				inputBlock = userinput.substr(0, here);
-				connector = userinput.substr(here, 1);
-				string rest = userinput;
-				userinput = rest.substr(here+1);
-		}
-		
-		else if(userinput.at(here) == '&' || userinput.at(here) == '|'){
-					if(userinput.at(here) == '&')	flag = 1;
-					if(userinput.at(here) == '|')	flag = 2;
+			if(userinput.at(here) == ';'){
+					flag = 3;
 					inputBlock = userinput.substr(0, here);
-					connector = userinput.substr(here, 2);
+					connector = userinput.substr(here, 1);
 					string rest = userinput;
-					userinput = rest.substr(here+2);
+					userinput = rest.substr(here+1);
+			}	
+			else if( ((userinput.at(here) == '&') && (userinput.at(here+1) == '&'))
+					|| ( (userinput.at(here) == '|') && (userinput.at(here+1) == '|'))){
+						if(userinput.at(here) == '&')	flag = 1;
+						if(userinput.at(here) == '|')	flag = 2;
+						inputBlock = userinput.substr(0, here);
+						connector = userinput.substr(here, 2);
+						string rest = userinput;
+						userinput = rest.substr(here+2);
+			}
 		}
 //			cout << here;
 //			cout << "inputBlock :" << inputBlock << "1" << endl;
 //			cout << "connector :" << connector << "2" << endl;
 //			cout << "userinput :" << userinput << "3" << endl;
-		}
+
 			if(flag == 0){
 				inputBlock = userinput;
 				userinput = "";
@@ -90,8 +99,10 @@ int main(int argc, char* argv[]){
 //		for(unsigned int j = 0; j < tokenlist.size(); ++j)	
 //			cout << "tokenlist" << j << tokenlist.at(j) << endl;	
 
+	//		cout << "pf = " << pf << " flag = " << flag << endl;
 //		for(unsigned int j = 0; j < tokenlist.size(); ++j){	//execute loop
-			
+		if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first) ){	
+			pf = 0;
 			if(strcmp(tokenlist.at(0), "exit") == 0)
 				exit(0); 	
 			
@@ -100,24 +111,42 @@ int main(int argc, char* argv[]){
 		//		}
 
 			else {
+				pipe(fd);
 				int pid = fork();	
 				if(pid == 0){
-					if(execvp(argg[0], argg) == -1){
+					close(fd[0]);
+					int check = execvp(argg[0], argg); 
+					if(check == -1){	
+						pf = 1;
+						write(fd[1], &pf, sizeof(pf));
+						close(fd[1]);
 						perror("execvp");
-						pf = 2;
 					}
-					else pf = 1;
+					else{
+						pf = 0;
+						write(fd[1], &pf, sizeof(pf));
+						close(fd[1]);
+						perror("execvp");
+					}
 					exit(0);
 				}
 
 				else if(pid > 0){
 					waitpid(pid, NULL, 0);
+					close(fd[1]);
+					read(fd[0], &pf, sizeof(pf));
+					close(fd[0]);
 				}
 
 				else perror("fork");
 			
 			}
-		cout << "pass/fail = " << pf << endl;
+		}
+//		cout << "pass/fail = " << pf << endl;
+//		cout << "flag = " << flag << endl;
+//		cout << "first = " << first << endl;
+		first = false;
+		prevflag = flag;
 		delete[] uinput;	
 		}
 	}
