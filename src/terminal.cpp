@@ -28,13 +28,31 @@ int main(int argc, char* argv[]){
 		//get input
 		string userinput;
 		getline(cin, userinput);
-		char *token;
+		
+//while(!end of string){
+
+		unsigned int here;
+		if(userinput.find(";") != string::npos)
+			here = userinput.find(";");
+		else here = userinput.size()-1;
+		
+		if(userinput.find("&&") != string::npos && userinput.find("&&") < here)
+				here = userinput.find("&&");
+	
+		if(userinput.find("||") != string::npos && userinput.find("||") < here)
+			here = userinput.find("||");
+
+		string inputBlock = userinput.substr(0, here);
+		string connector = userinput.substr(here, 1);
+		string rest = userinput;
+		userinput = rest.substr(here+1);
+
+	cout << inputBlock << " " << connector << " " << userinput << endl;
 
 		//tokenize here	
 		vector<char*> tokenlist;				
+		char *token;
 	
-//find ; && || and add space if needed
-		
 		char *uinput = new char[userinput.length() +1];	//turns string into c*
 		strcpy(uinput, userinput.c_str());
 
@@ -56,9 +74,13 @@ int main(int argc, char* argv[]){
 			if(strcmp(tokenlist.at(j), "exit") == 0)
 				exit(0); 	
 				
-			else if(execvp(argg[0], argg) == -1){
-				perror("execvp");
-			}
+			else {
+				
+				
+				
+				if(execvp(argg[0], argg) == -1)
+					perror("execvp");
+
 		//	else if(tokenlist.at(j) == "true");
 
 			//else if(tokenlist.at(j) == "false") exit(0);
@@ -70,9 +92,9 @@ int main(int argc, char* argv[]){
 			else {
 				perror("not a valid command");
 			}
+			}
 		}
-		delete [] uinput;
-		
+		delete [] uinput;	
 	}
 	return 0;
 }
