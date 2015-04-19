@@ -26,75 +26,83 @@ int main(int argc, char* argv[]){
 	while(1){
 		outhostname();
 		//get input
-		string userinput;
+		string userinput, inputBlock, connector;
 		getline(cin, userinput);
 		
-//while(!end of string){
-
-		unsigned int here;
-		if(userinput.find(";") != string::npos)
-			here = userinput.find(";");
-		else here = userinput.size()-1;
+		while(!userinput.empty()){
+			unsigned int here = 0;
+			if(userinput.find(";") != string::npos)
+				here = userinput.find(";");
 		
-		if(userinput.find("&&") != string::npos && userinput.find("&&") < here)
-				here = userinput.find("&&");
+			if(userinput.find("&&") != string::npos)
+				if(userinput.find("&&") < here)
+					here = userinput.find("&&");
 	
-		if(userinput.find("||") != string::npos && userinput.find("||") < here)
-			here = userinput.find("||");
+			if(userinput.find("||") != string::npos)
+				if(userinput.find("||") < here)
+					here = userinput.find("||");
 
-		string inputBlock = userinput.substr(0, here);
-		string connector = userinput.substr(here, 1);
-		string rest = userinput;
-		userinput = rest.substr(here+1);
+			if(here > 0){
+			inputBlock = userinput.substr(0, here);
+			connector = userinput.substr(here, 1);
+			string rest = userinput;
+			userinput = rest.substr(here+1);
+		
+			cout << here;
+			cout << "inputBlock :" << inputBlock << "1" << endl;
+			cout << "connector :" << connector << "2" << endl;
+			cout << "userinput :" << userinput << "3" << endl;
+			}
 
-	cout << inputBlock << " " << connector << " " << userinput << endl;
+			else{
+				inputBlock = userinput;
+				userinput = "";
+			}
 
 		//tokenize here	
-		vector<char*> tokenlist;				
-		char *token;
+			vector<char*> tokenlist;				
+			char *token;
 	
-		char *uinput = new char[userinput.length() +1];	//turns string into c*
-		strcpy(uinput, userinput.c_str());
+			char *uinput = new char[inputBlock.length() +1];	//turns string into c*
+			strcpy(uinput, inputBlock.c_str());
 
-		token = strtok(uinput, " ");				//tokenize and add to vector of char*
-		while(token != NULL){
-			tokenlist.push_back(token);
-			token = strtok(NULL, " ");	
-		}
+			token = strtok(uinput, " ");				//tokenize and add to vector of char*
+			while(token != NULL){
+				tokenlist.push_back(token);
+				token = strtok(NULL, " ");	
+			}
+		
+			tokenlist.push_back('\0');
 
-		tokenlist.push_back('\0');
-
-		char **argg = &tokenlist[0]; 
+			char **argg = &tokenlist[0]; 
 
 //		for(unsigned int j = 0; j < tokenlist.size(); ++j)	
-//			cout << j << tokenlist.at(j) << endl;	
+//			cout << "tokenlist" << j << tokenlist.at(j) << endl;	
 
-		for(unsigned int j = 0; j < tokenlist.size(); ++j){	//execute loop
+//		for(unsigned int j = 0; j < tokenlist.size(); ++j){	//execute loop
 			
-			if(strcmp(tokenlist.at(j), "exit") == 0)
+			if(strcmp(tokenlist.at(0), "exit") == 0)
 				exit(0); 	
 				
 			else {
-				
-				
-				
-				if(execvp(argg[0], argg) == -1)
-					perror("execvp");
+				int pid = fork();	
+				if(pid == 0){
+					if(execvp(argg[0], argg) == -1)
+						perror("execvp");
+					exit(0);
+				}
 
-		//	else if(tokenlist.at(j) == "true");
+				else if(pid > 0){
+					waitpid(pid, NULL, 0);
+				}
 
+				else perror("fork");
+			//	else if(tokenlist.at(j) == "true");
 			//else if(tokenlist.at(j) == "false") exit(0);
 
-		//	else if(tokenlist.at(j) == "&" && tokenlist.at(j+1) == "&");
-				
-		//	else if(tokenlist.at(j) == "|" && tokenlist.at(j+1) == "|");
-
-			else {
-				perror("not a valid command");
 			}
-			}
+		delete[] uinput;	
 		}
-		delete [] uinput;	
 	}
 	return 0;
 }
