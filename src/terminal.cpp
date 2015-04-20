@@ -23,14 +23,6 @@ void outhostname(){
 		}
 }
 
-//check for comments,							DONE
-//single & or |									DONE
-//make && and || work							DONE
-//other test cases? - check the README
-//oh yeah do the readme
-//do the makefile
-//write down the testcases and do on script
-
 int main(int argc, char* argv[]){
 	while(1){
 		outhostname();
@@ -46,7 +38,9 @@ int main(int argc, char* argv[]){
 			unsigned int here;
 			unsigned int flag = 0;		
 
-		if(userinput.find_first_not_of ("|&;") == string::npos){
+		auto compp = userinput.find_first_not_of (" \t|&;"); 
+		if(compp == string::npos){
+			if(userinput.at(here) == '|' || userinput.at(here) == '&' || userinput.at(here) == ';')	
 			cout << "Error! Syntax error, try again." << endl;
 			break;
 		}
@@ -54,9 +48,6 @@ int main(int argc, char* argv[]){
 		if(userinput.find_first_of("#") != string::npos){
 			userinput = userinput.substr(0, userinput.find_first_of("#"));
 		}
-		
-		if(userinput.find_first_not_of (" \t") == string::npos)
-			break;
 
 		userinput.append(" ");	
 		if(userinput.find_first_of(";&|") != string::npos){
@@ -79,10 +70,14 @@ int main(int argc, char* argv[]){
 			}
 	
 		}
-//			cout << here;
-//			cout << "inputBlock :" << inputBlock << "1" << endl;
-//			cout << "connector :" << connector << "2" << endl;
-//			cout << "userinput :" << userinput << "3" << endl;
+			if(userinput.empty() || (compp > here) || userinput.find_first_not_of(" \t") == string::npos){
+			cout << "Error! Syntax error, try again." << endl;
+				break;
+			}
+		//	cout << here;
+		//	cout << "inputBlock :" << inputBlock << "1" << endl;
+		//	cout << "connector :" << connector << "2" << endl;
+		//	cout << "userinput :" << userinput << "3" << endl;
 
 			if(flag == 0){
 				inputBlock = userinput;
@@ -148,9 +143,6 @@ int main(int argc, char* argv[]){
 			
 			}
 		}
-//		cout << "pass/fail = " << pf << endl;
-//		cout << "flag = " << flag << endl;
-//		cout << "first = " << first << endl;
 		first = false;
 		prevflag = flag;
 		delete[] uinput;	
