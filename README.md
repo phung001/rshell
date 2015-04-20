@@ -20,10 +20,10 @@ may also be connected by a connector. It will work with any number of commands a
 parameters and connectors may be placed anywhere in between commands. Some examples 
 include: 
 	
-* 'ls -a'
-* 'pwd ; ls -a'
-* '						ls		-a;		pwd&&exit'
-* 'ls	&& pwd ;ls   -a ||ps'
+* ls -a
+* pwd ; ls -a
+* 						ls		-a;	\t pwd&&exit
+* ls	&& pwd ;ls   -a ||ps
 
 This shell can also run another instance of itself, which can be seen if you use 'ps'. 
 
