@@ -59,5 +59,6 @@ in the input, but any characters after it will be ignored.
 
 `ls -a` will run but since `pwd` is after the `#` sign, it will be ignored.
 
+###Bugs!
 
-
+None are currently known. Tell me if you find some!

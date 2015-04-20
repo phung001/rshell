@@ -1,0 +1,116 @@
+Script started on Sun 19 Apr 2015 11:20:46 PM PDT
+~
+phung001@hammer $ cd CS100/m[Krshell/
+~/CS100/rshell
+phung001@hammer $ make
+mkdir bin
+g++ -Wall -Werror -ansi -pedantic -o ./bin/rshell ./src/terminal.cpp 
+~/CS100/rshell
+phung001@hammer $ bin/rshell 
+phung001@hammer.cs.ucr.edu$ ls  
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ ls -a -l
+total 52
+drwx------ 6 phung001 csmajs  4096 Apr 19 23:15 .
+drwx------ 6 phung001 csmajs  4096 Apr 13 20:50 ..
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
+drwx------ 8 phung001 csmajs  4096 Apr 19 22:30 .git
+-rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
+-rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
+-rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
+phung001@hammer.cs.ucr.edu$ ls -a - l  l -g -   f -g t -t -i -sm  -m -q -n -C  
+total 52
+11166317  4 bin    11365726  4 src	   7645853  4 .git
+ 7645852  4 .	   11166318  4 README.md  23630251 20 LICENSE
+19869528  4 tests   8732797  4 Makefile   15563585  4 ..
+phung001@hammer.cs.ucr.edu$ /bin    bin/r	shell
+phung001@hammer.cs.ucr.edu$ ps
+  PID TTY          TIME CMD
+ 5615 pts/87   00:00:00 bash
+ 5761 pts/87   00:00:00 rshell
+ 6044 pts/87   00:00:00 rshell
+ 6045 pts/87   00:00:00 ps
+phung001@hammer.cs.ucr.edu$ exit
+phung001@hammer.cs.ucr.edu$ ps
+  PID TTY          TIME CMD
+ 5615 pts/87   00:00:00 bash
+ 5761 pts/87   00:00:00 rshell
+ 6067 pts/87   00:00:00 ps
+phung001@hammer.cs.ucr.edu$ wrong command
+execvp: No such file or directory
+phung001@hammer.cs.ucr.edu$ ls 		-a  -l		-C  
+total 52
+drwx------ 6 phung001 csmajs  4096 Apr 19 23:15 .
+drwx------ 6 phung001 csmajs  4096 Apr 13 20:50 ..
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
+drwx------ 8 phung001 csmajs  4096 Apr 19 22:30 .git
+-rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
+-rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
+-rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
+phung001@hammer.cs.ucr.edu$ ls ; pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/phung001/CS100/rshell
+phung001@hammer.cs.ucr.edu$ ls ; awda    asdasd
+bin  LICENSE  Makefile	README.md  src	tests
+execvp: No such file or directory
+phung001@hammer.cs.ucr.edu$ ls && pwd
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/phung001/CS100/rshell
+phung001@hammer.cs.ucr.edu$ ls && awdasd
+bin  LICENSE  Makefile	README.md  src	tests
+execvp: No such file or directory
+phung001@hammer.cs.ucr.edu$ asdasd && ls
+execvp: No such file or directory
+phung001@hammer.cs.ucr.edu$ ls || asdasd
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ asdasd || ls
+execvp: No such file or directory
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ ls ; pwd && ls-    -a || ps ; exi   ls
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/phung001/CS100/rshell
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ ls || pw s && pwd ; ls -a
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/phung001/CS100/rshell
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+phung001@hammer.cs.ucr.edu$ pwd || ; ps           ls -l||pwd
+total 40
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
+-rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
+-rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
+-rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
+phung001@hammer.cs.ucr.edu$ exit
+~/CS100/rshell
+phung001@hammer $ bin/rshell
+phung001@hammer.cs.ucr.edu$ exit param param
+~/CS100/rshell
+phung001@hammer $ bin [K/rshelll[K
+phung001@hammer.cs.ucr.edu$ ls -l exit
+ls: cannot access exit: No such file or directory
+phung001@hammer.cs.ucr.edu$ ls -a #comment
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+phung001@hammer.cs.ucr.edu$ #comment by itself
+Error! Syntax error, try again.
+phung001@hammer.cs.ucr.edu$ ls -l#  comment
+total 40
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
+-rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
+-rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
+-rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
+drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
+phung001@hammer.cs.ucr.edu$ ls -a; exit
+.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
+~/CS100/rshell
+phung001@hammer $ exit[K[K[K[Kexit
+exit
+
+Script done on Sun 19 Apr 2015 11:39:44 PM PDT

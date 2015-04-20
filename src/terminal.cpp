@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
 			unsigned int here;
 			unsigned int flag = 0;		
 
-		auto compp = userinput.find_first_not_of (" \t|&;"); 
+		unsigned int compp = userinput.find_first_not_of (" \t|&;"); 
 		if(compp == string::npos){
 			if(userinput.at(here) == '|' || userinput.at(here) == '&' || userinput.at(here) == ';')	
 			cout << "Error! Syntax error, try again." << endl;
@@ -110,7 +110,12 @@ int main(int argc, char* argv[]){
 			pf = 0;
 			if(strcmp(tokenlist.at(0), "exit") == 0)
 				exit(0); 	
-			
+		
+			if(strcmp(tokenlist.at(0), "false") == 0){
+				break;
+				pf = 1;
+			}
+
 			else {
 				pipe(fd);
 				int pid = fork();	
