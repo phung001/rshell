@@ -8,7 +8,7 @@ bin:
 	mkdir bin
 
 bin/rshell: ./src/terminal.cpp | bin
-	g++ ./src/terminal.cpp $(CFlags) -std=c++11 -o ./bin/rshell 	
+	g++ $(CFlags) -o ./bin/rshell ./src/terminal.cpp 
 
 clean: 
 	rm -rf bin 
