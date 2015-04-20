@@ -22,8 +22,8 @@ include:
 	
 * ls -a
 * pwd ; ls -a
-* 						ls		-a;	\t pwd&&exit
-* ls	&& pwd ;ls   -a ||ps
+*       ls      -a;	        pwd&&exit
+* ls    && pwd ;ls   -a ||ps
 
 This shell can also run another instance of itself, which can be seen if you use 'ps'. 
 
