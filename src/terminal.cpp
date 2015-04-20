@@ -41,7 +41,7 @@ int main(int argc, char* argv[]){
 		bool first = true;
 		int fd[2];
 		int prevflag = 0;
-	
+
 		while(!userinput.empty()){
 			unsigned int here;
 			unsigned int flag = 0;	
@@ -50,6 +50,12 @@ int main(int argc, char* argv[]){
 			userinput = userinput.substr(0, userinput.find_first_of("#"));
 		}
 
+		if(userinput.find_first_not_of ("|&; \t") == string::npos){
+			cout << "Error! Syntax error, try again." << endl;
+			break;
+		}
+
+		userinput.append(" ");	
 		if(userinput.find_first_of(";&|") != string::npos){
 			here = userinput.find_first_of(";&|");
 			if(userinput.at(here) == ';'){
@@ -68,11 +74,12 @@ int main(int argc, char* argv[]){
 						string rest = userinput;
 						userinput = rest.substr(here+2);
 			}
+	
 		}
-//			cout << here;
-//			cout << "inputBlock :" << inputBlock << "1" << endl;
-//			cout << "connector :" << connector << "2" << endl;
-//			cout << "userinput :" << userinput << "3" << endl;
+			cout << here;
+			cout << "inputBlock :" << inputBlock << "1" << endl;
+			cout << "connector :" << connector << "2" << endl;
+			cout << "userinput :" << userinput << "3" << endl;
 
 			if(flag == 0){
 				inputBlock = userinput;
@@ -106,10 +113,6 @@ int main(int argc, char* argv[]){
 			if(strcmp(tokenlist.at(0), "exit") == 0)
 				exit(0); 	
 			
-		//	else if(strcmp(tokenlist.at(0), "") == 0){
-		//			pf = pf;	
-		//		}
-
 			else {
 				pipe(fd);
 				int pid = fork();	

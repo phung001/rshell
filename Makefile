@@ -3,7 +3,7 @@ CFlags = -Wall -Werror -ansi -pedantic
 all: rshell
 
 rshell: 
-	g++ $(CFlags) -std=c++11 /src/terminal.cpp 
-	
+	g++ /src/terminal.cpp $(CFlags) -std=c++11 	
+
 clean: 
 	rm -f rshell /src/terminal.cpp
