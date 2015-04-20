@@ -44,16 +44,19 @@ int main(int argc, char* argv[]){
 
 		while(!userinput.empty()){
 			unsigned int here;
-			unsigned int flag = 0;	
+			unsigned int flag = 0;		
+
+		if(userinput.find_first_not_of ("|&;") == string::npos){
+			cout << "Error! Syntax error, try again." << endl;
+			break;
+		}
 
 		if(userinput.find_first_of("#") != string::npos){
 			userinput = userinput.substr(0, userinput.find_first_of("#"));
 		}
-
-		if(userinput.find_first_not_of ("|&; \t") == string::npos){
-			cout << "Error! Syntax error, try again." << endl;
+		
+		if(userinput.find_first_not_of (" \t") == string::npos)
 			break;
-		}
 
 		userinput.append(" ");	
 		if(userinput.find_first_of(";&|") != string::npos){
@@ -76,10 +79,10 @@ int main(int argc, char* argv[]){
 			}
 	
 		}
-			cout << here;
-			cout << "inputBlock :" << inputBlock << "1" << endl;
-			cout << "connector :" << connector << "2" << endl;
-			cout << "userinput :" << userinput << "3" << endl;
+//			cout << here;
+//			cout << "inputBlock :" << inputBlock << "1" << endl;
+//			cout << "connector :" << connector << "2" << endl;
+//			cout << "userinput :" << userinput << "3" << endl;
 
 			if(flag == 0){
 				inputBlock = userinput;
