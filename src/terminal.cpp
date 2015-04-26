@@ -23,6 +23,28 @@ void outhostname(){
 		}
 }
 
+string trim_space(string const& str){
+	if(str.empty()) return str;
+
+	size_t first = str.find_first_not_of(' ');
+	size_t last = str.find_last_not_of(' ');
+	return str.substr(first, last-first+1);
+}
+
+string trim_tab(string const& str){
+	if(str.empty()) return str;
+
+	size_t first = str.find_first_not_of('\t');
+	size_t last = str.find_last_not_of('\t');
+	return str.substr(first, last-first+1);
+}
+
+string trim(string const& str){
+	string temp = trim_space(str);
+	temp = trim_tab(temp);
+	return temp;
+}
+
 int main(int argc, char* argv[]){
 	while(1){
 		outhostname();
@@ -38,12 +60,10 @@ int main(int argc, char* argv[]){
 			unsigned int here;
 			unsigned int flag = 0;		
 
-		unsigned int compp = userinput.find_first_not_of (" \t|&;"); 
-		if(compp == string::npos){
-			if(userinput.at(here) == '|' || userinput.at(here) == '&' || userinput.at(here) == ';')	
-			cout << "Error! Syntax error, try again." << endl;
-			break;
-		}
+		unsigned int first_char = userinput.find_first_not_of(" \t");
+	
+		if(first_char > userinput.size()) break; 
+		userinput = trim(userinput);
 
 		if(userinput.find_first_of("#") != string::npos){
 			userinput = userinput.substr(0, userinput.find_first_of("#"));
@@ -70,18 +90,21 @@ int main(int argc, char* argv[]){
 			}
 	
 		}
-			if(userinput.empty() || (compp > here) || userinput.find_first_not_of(" \t") == string::npos){
-			cout << "Error! Syntax error, try again." << endl;
-				break;
-			}
+	
 		//	cout << here;
 		//	cout << "inputBlock :" << inputBlock << "1" << endl;
 		//	cout << "connector :" << connector << "2" << endl;
 		//	cout << "userinput :" << userinput << "3" << endl;
 
+
 			if(flag == 0){
 				inputBlock = userinput;
 				userinput = "";
+			}
+
+			if(inputBlock.empty())	{
+				cout << "execvp: No such file or directory" << endl;
+				break;
 			}
 
 		//tokenize here	

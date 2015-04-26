@@ -59,6 +59,14 @@ in the input, but any characters after it will be ignored.
 
 `ls -a` will run but since `pwd` is after the `#` sign, it will be ignored.
 
+###Special Cases
+
+A valid input followed by either `;`, `|`, or `&` without any input after that will 
+still be correct. For example: 
+
+	ls -a ; 
+will still work.
+
 ###Bugs!
 
 None are currently known. Tell me if you find some!
