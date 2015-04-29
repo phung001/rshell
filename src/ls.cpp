@@ -77,27 +77,36 @@ void ls_go(char *argv, bool a, bool l, bool R){
 	}
 }
 
-
-
-
 int main(int argc, char** argv){
 
 	char here[1] = {'.'};
-	if(argc == 1){
-		// do ls here
+	if(argc == 1){								//regular ls
 		ls_go(here, false, false ,false);		
 	}
 	else{
-		if(strcmp(argv[1], "-a") == 0) ls_go(here, true, false, false);
+		string flags;
+		int comp = argc;
+	//	for(signed int i = 1; i < comp; i++){
+		//	if(argv[i][0] == '-'){}	flags.append(argv[i]);
+	//	}
+		cout << flags << endl;
 
+		bool a, l, R = false;
+		if(flags.find('a') != string::npos) a = true;
+		if(flags.find('l') != string::npos) l = true;
+		if(flags.find('R') != string::npos) R = true;
+
+		ls_go(here, a, l, R);	//ls
+	
+	
+//		else if(strcmp(argv[1], "-R") == 0) ls_go(here, false, false, true);	//ls -R
 		
-		
-		else{
-			cout << "nothing" << endl;
+//		else{
+//			cout << "Error: invalid parameter(s) entered." << endl;
 
 
 
-		}
+//		}
 	}
 
 
