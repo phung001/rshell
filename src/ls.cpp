@@ -78,26 +78,44 @@ void ls_go(char *argv, bool a, bool l, bool R){
 }
 
 int main(int argc, char** argv){
-
-	char here[1] = {'.'};
+	
+	bool a = false;
+	bool l = false;
+	bool R = false;
+	char here[2] = {"."};
+	
 	if(argc == 1){								//regular ls
-		ls_go(here, false, false ,false);		
+	//	cout << "here" << endl;
+		ls_go(here, a, l, R);		
 	}
 	else{
+		vector<char*> list;
 		string flags;
-		int comp = argc;
-	//	for(signed int i = 1; i < comp; i++){
-		//	if(argv[i][0] == '-'){}	flags.append(argv[i]);
-	//	}
-		cout << flags << endl;
 
-		bool a, l, R = false;
+		for(signed int i = 1; i < argc; i++){
+			list.push_back(argv[i]);
+		}
+		
+		for(unsigned int i = 0; i < list.size(); i++){
+			if(list[i][0] == '-'){
+				flags.append(list[i]);
+				list.erase(list.begin()+i);
+			}
+	
+		}
+		cout << flags << endl;
+		
 		if(flags.find('a') != string::npos) a = true;
 		if(flags.find('l') != string::npos) l = true;
 		if(flags.find('R') != string::npos) R = true;
 
-		ls_go(here, a, l, R);	//ls
-	
+		if(list.empty()) ls_go(here, a, l, R);
+		else{
+			for(unsigned int i = 0; i < list.size(); i++){
+				ls_go(list[i], a, l, R);
+			}
+		}
+		
 	
 //		else if(strcmp(argv[1], "-R") == 0) ls_go(here, false, false, true);	//ls -R
 		
