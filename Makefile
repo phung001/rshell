@@ -13,7 +13,7 @@ bin/rshell: ./src/terminal.cpp | bin
 	g++ $(CFlags) -o ./bin/rshell ./src/terminal.cpp 
 
 bin/ls: ./src/ls.cpp | bin
-	g++ $(CFlags) -o ./bin/ls ./src/ls.cpp 
+	g++ $(CFlags) -std=c++11 -o ./bin/ls ./src/ls.cpp 
 
 clean: 
 	rm -rf bin
