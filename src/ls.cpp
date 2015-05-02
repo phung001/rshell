@@ -37,8 +37,8 @@ int longest_str(vector<char*> list){
 	if(list.empty())	return 0;
 	unsigned int longest = 0;
 	for(unsigned int i = 0; i < list.size(); i++){
-		if(strlen(list[i]) > longest){
-			longest = strlen(list[i]);
+		if(strlen(list.at(i)) > longest){
+			longest = strlen(list.at(i));
 		}
 	}
 	return longest;
@@ -83,29 +83,20 @@ void ls_go(char *argv, bool &a, bool &l, bool &R){
 			string arg2;
 			if(R){												//for -R
 				arg2.append(argv);
-//cout << arg2 << endl;
 				arg2.append("/");
-//cout << arg2 << endl;
 				arg2.append(filespecs->d_name);
-//cout << arg2 << endl;
 				char *argg = new char[arg2.length()+1];
 				strcpy(argg, arg2.c_str());
 		
-//	cout << '1' << arg2 << '2' << argg << endl;
 				if(-1 == stat(argg, &s)) {
-//cout << argg << " ";
 					perror("Error with stat2");
 					exit(1);
 				}
-//cout << filespecs->d_name << endl;
 				if((S_IFDIR & s.st_mode) )  {//is a directory
-//			cout << "0000" <<  argg << endl;
 					if ((a) && (strcmp(filespecs->d_name, ".") != 0) && (strcmp(filespecs->d_name, "..") != 0)) {
-//			cout << "2222" << filespecs->d_name << endl;
 						dirlist.push_back(arg2);
 					}
 					else if((!a) && (filespecs->d_name[0] != '.')){
-//			cout << "3333" << filespecs->d_name << endl;
 						dirlist.push_back(arg2);
 					}
 				}
@@ -117,10 +108,31 @@ void ls_go(char *argv, bool &a, bool &l, bool &R){
 		sort(list.begin(), list.end(), sort_alpha);
 
 
-		if(R) cout << argv << ":" << endl;
+		if(R)	cout << argv << ":" << endl;
+		int currlen = 0;
 		if(!list.empty() && !l){
 			for(unsigned int i = 0; i < list.size(); i++){
-				cout << list.at(i) << "  ";
+				currlen += strlen(list.at(i)) + 1;
+				if(currlen >= 64){
+					cout << endl;	
+					currlen = strlen(list.at(i)) +1;
+				}
+			//struct stat s;
+				string color = argv;
+				color.append("/");
+				color.append(list.at(i));
+				if(-1 == lstat(color.c_str(), &s)) {
+					cout << "stat color" << color  << endl;
+					perror("Error with stat");
+					exit(1);
+				}
+				if(S_IFDIR & s.st_mode)								//is a directory
+					cout << "\x1b[34m";	
+				else if(s.st_mode & S_IXUSR)
+					cout << "\x1b[32m";
+				if(list.at(i)[0] == '.')
+					cout << "\x1b[47m";
+				cout << list.at(i) << "\x1b[0m" << "  " ;
 			}
 			cout  <<  endl;
 		}

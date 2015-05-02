@@ -1,0 +1,1645 @@
+Script started on Fri 01 May 2015 11:12:08 PM PDT
+~
+phung001@hammer $ cs100
+[0;91m
+===============================================================================
+|                                                                             |
+| You have enabled settings specific for cs100.  Everything you do is being   |
+| recorded to measure your progress in the class.                             |
+|                                                                             |
+| Important commands for the class:                                           |
+|   * calcgrade.sh          displays a detailed breakdown of your grade       |
+|   * checksyscalls.sh      is your cpp file doing proper error checking?     |
+|   * typespeed             practice typing unix commands                     |
+|                                                                             |
+| Important commands for general C++ programming:                             |
+|   * make                  don't call g++ manually; let make do the work!    |
+|   * gdb                   the GNU debugger                                  |
+|   * valgrind              get rid of your memory leaks                      |
+|   * cppcheck              static analysis tool                              |
+|   * man                   find help about any syscall / terminal command    |
+|                                                                             |
+===============================================================================
+[0m
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~[0;95m [0;36m$[0m cd CS100/rshell/
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m make
+mkdir bin
+g++ -Wall -Werror -ansi -pedantic -o ./bin/rshell ./src/terminal.cpp 
+g++ -Wall -Werror -ansi -pedantic -std=c++11 -o ./bin/ls ./src/ls.cpp 
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls 
+[34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls src/
+[32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls src/[K[K[K[KMakefile 
+Makefile
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls Makefile src/
+Makefile
+[32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls Makefile src/[Kbin/ls Makefile src/[Kbin/ls -a
+[34m[47m.[0m  [34m[47m..[0m  [34m[47m.git[0m  [34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -a[Kl
+size = 40
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 bin
+-rw------- 1 phung001 csmajs 18047 Apr 14 03:50 LICENSE
+-rw------- 1 phung001 csmajs 297   May  2 02:21 Makefile
+-rw------- 1 phung001 csmajs 1970  Apr 26 00:57 README.md
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 src
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 tests
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -l[KR
+.:
+[34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+
+./src:
+[32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+
+./tests:
+exec.script[0m  ls.script[0m  
+
+./bin:
+[32mls[0m  [32mrshell[0m  
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -Rla src/
+[34m[47m.[0m  [34m[47m..[0m  [32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -a src/[1P src/R src/
+src/:
+[32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -R src/[1P src/l src/
+size = 132
+-rwx------ 1 phung001 csmajs 75409 May  2 03:10 a.out
+-rw------- 1 phung001 csmajs 26471 Apr 29 06:33 cp.cpp
+-rw------- 1 phung001 csmajs 7253  May  2 05:27 ls.cpp
+-rw------- 1 phung001 csmajs 4148  Apr 26 00:51 terminal.cpp
+-rw------- 1 phung001 csmajs 4875  Apr 29 06:33 timer.h
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -l src/[C[C[C[C[K[K[K[K[K[Kal
+size = 52
+drwx------ 6 phung001 csmajs 4096  May  2 06:06 .
+drwx------ 6 phung001 csmajs 4096  Apr 14 03:50 ..
+drwx------ 8 phung001 csmajs 4096  May  2 03:21 .git
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 bin
+-rw------- 1 phung001 csmajs 18047 Apr 14 03:50 LICENSE
+-rw------- 1 phung001 csmajs 297   May  2 02:21 Makefile
+-rw------- 1 phung001 csmajs 1970  Apr 26 00:57 README.md
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 src
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 tests
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -al src/
+Error with getgrpid: Success
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -al src/
+size = 140
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 .
+drwx------ 6 phung001 csmajs 4096  May  2 06:06 ..
+-rwx------ 1 phung001 csmajs 75409 May  2 03:10 a.out
+-rw------- 1 phung001 csmajs 26471 Apr 29 06:33 cp.cpp
+-rw------- 1 phung001 csmajs 7253  May  2 05:27 ls.cpp
+-rw------- 1 phung001 csmajs 4148  Apr 26 00:51 terminal.cpp
+-rw------- 1 phung001 csmajs 4875  Apr 29 06:33 timer.h
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -al src/[1P src/[1P src/l src/R src/
+src/:
+size = 132
+-rwx------ 1 phung001 csmajs 75409 May  2 03:10 a.out
+-rw------- 1 phung001 csmajs 26471 Apr 29 06:33 cp.cpp
+-rw------- 1 phung001 csmajs 7253  May  2 05:27 ls.cpp
+-rw------- 1 phung001 csmajs 4148  Apr 26 00:51 terminal.cpp
+-rw------- 1 phung001 csmajs 4875  Apr 29 06:33 timer.h
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -al[KR
+.:
+[34m[47m.[0m  [34m[47m..[0m  [34m[47m.git[0m  [34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+
+./.git:
+[34m[47m.[0m  [34m[47m..[0m  [34mbranches[0m  config[0m  COMMIT_EDITMSG[0m  description[0m  FETCH_HEAD[0m  
+[34mhooks[0m  HEAD[0m  [34minfo[0m  index[0m  [34mlogs[0m  [34mobjects[0m  ORIG_HEAD[0m  packed-refs[0m  [34mrefs[0m  
+
+./.git/refs:
+[34m[47m.[0m  [34m[47m..[0m  [34mheads[0m  [34mremotes[0m  [34mtags[0m  
+
+./.git/refs/heads:
+[34m[47m.[0m  [34m[47m..[0m  exec[0m  ls[0m  master[0m  
+
+./.git/refs/tags:
+[34m[47m.[0m  [34m[47m..[0m  hw0[0m  
+
+./.git/refs/remotes:
+[34m[47m.[0m  [34m[47m..[0m  [34morigin[0m  
+
+./.git/refs/remotes/origin:
+[34m[47m.[0m  [34m[47m..[0m  exec[0m  HEAD[0m  ls[0m  master[0m  new[0m  
+
+./.git/branches:
+[34m[47m.[0m  [34m[47m..[0m  
+
+./.git/info:
+[34m[47m.[0m  [34m[47m..[0m  exclude[0m  
+
+./.git/hooks:
+[34m[47m.[0m  [34m[47m..[0m  [32mapplypatch-msg.sample[0m  [32mcommit-msg.sample[0m  
+[32mpost-receive.sample[0m  [32mpre-rebase.sample[0m  
+[32mprepare-commit-msg.sample[0m  [32mpost-commit.sample[0m  
+[32mpre-applypatch.sample[0m  [32mpre-commit.sample[0m  [32mpost-update.sample[0m  
+[32mupdate.sample[0m  
+
+./.git/objects:
+[34m[47m..[0m  [34m[47m.[0m  [34m02[0m  [34m01[0m  [34m07[0m  [34m03[0m  [34m1f[0m  [34m19[0m  [34m15[0m  [34m13[0m  [34m14[0m  [34m2e[0m  [34m2d[0m  [34m26[0m  [34m2c[0m  [34m2b[0m  [34m25[0m  [34m24[0m  [34m20[0m  [34m21[0m  [34m3c[0m  
+[34m36[0m  [34m38[0m  [34m37[0m  [34m34[0m  [34m3a[0m  [34m30[0m  [34m3e[0m  [34m32[0m  [34m35[0m  [34m4a[0m  [34m45[0m  [34m4e[0m  [34m4c[0m  [34m46[0m  [34m41[0m  [34m44[0m  [34m4f[0m  [34m55[0m  [34m52[0m  [34m59[0m  [34m57[0m  
+[34m58[0m  [34m56[0m  [34m6d[0m  [34m61[0m  [34m65[0m  [34m6e[0m  [34m64[0m  [34m62[0m  [34m69[0m  [34m6f[0m  [34m7f[0m  [34m72[0m  [34m76[0m  [34m71[0m  [34m7c[0m  [34m7b[0m  [34m73[0m  [34m82[0m  [34m89[0m  [34m88[0m  [34m8a[0m  
+[34m81[0m  [34m85[0m  [34m8c[0m  [34m9f[0m  [34m93[0m  [34m97[0m  [34m90[0m  [34m94[0m  [34m91[0m  [34m9e[0m  [34m92[0m  [34maf[0m  [34mab[0m  [34maa[0m  [34ma3[0m  [34ma5[0m  [34mae[0m  [34mbe[0m  [34mba[0m  [34mb8[0m  [34mb2[0m  
+[34mb1[0m  [34mbc[0m  [34mbb[0m  [34mce[0m  [34mc1[0m  [34mc7[0m  [34mca[0m  [34mc4[0m  [34mcd[0m  [34mc3[0m  [34mdd[0m  [34mdf[0m  [34md2[0m  [34md7[0m  [34md3[0m  [34md9[0m  [34mdc[0m  [34mda[0m  [34me5[0m  [34me2[0m  [34meb[0m  
+[34me6[0m  [34mf0[0m  [34mf9[0m  [34mf6[0m  [34mfb[0m  [34mf8[0m  [34mfd[0m  [34mf1[0m  [34mfc[0m  [34minfo[0m  [34mpack[0m  
+
+./.git/objects/pack:
+[34m[47m.[0m  [34m[47m..[0m  
+
+./.git/objects/info:
+[34m[47m.[0m  [34m[47m..[0m  
+
+./.git/objects/36:
+[34m[47m.[0m  [34m[47m..[0m  6b3d3ff61cc0ab094c7287b43b5d685119860c[0m  
+
+./.git/objects/c4:
+[34m[47m.[0m  [34m[47m..[0m  514d41c6a985294666e0b7e141e0b166262ee0[0m  
+
+./.git/objects/ce:
+[34m[47m.[0m  [34m[47m..[0m  5950a27ef88b553e2c861d3b4ac51d7d44d146[0m  
+
+./.git/objects/65:
+[34m[47m.[0m  [34m[47m..[0m  aa6ebd95b4718bf56012e262d92f93a3d2191a[0m  
+d6ca235da22b2a0f0d7d61284dacc2520cda7a[0m  
+
+./.git/objects/8c:
+[34m[47m.[0m  [34m[47m..[0m  db8451d9b90c1d4000c6f22eb86471a4568be6[0m  
+
+./.git/objects/e6:
+[34m[47m.[0m  [34m[47m..[0m  9de29bb2d1d6434b8b29ae775ad8c2e48c5391[0m  
+
+./.git/objects/45:
+[34m[47m.[0m  [34m[47m..[0m  6304a38fee4ac8e805f177a59b49c40c150ece[0m  
+
+./.git/objects/90:
+[34m[47m.[0m  [34m[47m..[0m  6bdd3c963a11b2937e3e66fb06fd15967ebcaa[0m  
+
+./.git/objects/2d:
+[34m[47m.[0m  [34m[47m..[0m  3fdbd52cf2d386fb32f3b9a303ec83610f0854[0m  
+47279f2e6e3e22080b6c75884ac7403bdb9318[0m  
+
+./.git/objects/26:
+[34m[47m.[0m  [34m[47m..[0m  8d0e8358f520684cecb1ec363faa36384106ac[0m  
+890be0338b19dde6c4e2dee2a0777125cf3553[0m  
+b2f10b535107f4ce076bfd8cde88d38bb3a350[0m  
+
+./.git/objects/85:
+[34m[47m.[0m  [34m[47m..[0m  3429fbf73386a97a1dec6d3c9d2be47dd47be0[0m  
+9bd04f5a501e42d17b8a06939b070917aae7e5[0m  
+
+./.git/objects/cd:
+[34m[47m.[0m  [34m[47m..[0m  86dbb1f4efebc21c6463b70e527a50dbd4f866[0m  
+ef7cab56bc4278ae9031799bfaae6b79302ad0[0m  
+
+./.git/objects/3e:
+[34m[47m.[0m  [34m[47m..[0m  3b1ab58ef90fbd6c11f3b4453e8804e2ac4f10[0m  
+89ce472d81f9b42abcbc00363c7c0d403465e4[0m  
+
+./.git/objects/4f:
+[34m[47m.[0m  [34m[47m..[0m  f0d27104062c01260dc3ffc8957b74031a9d71[0m  
+
+./.git/objects/69:
+[34m[47m.[0m  [34m[47m..[0m  c4af5ed39e6255d687041920c2a38675b08f0d[0m  
+
+./.git/objects/73:
+[34m[47m.[0m  [34m[47m..[0m  21d2f61752145a3663fa6e1c2b40eb94560eaa[0m  
+
+./.git/objects/7b:
+[34m[47m.[0m  [34m[47m..[0m  ffaf07f66b25f42fa9d6a2072fb18e14681c39[0m  
+
+./.git/objects/3a:
+[34m[47m.[0m  [34m[47m..[0m  43ea92cef89afa85b4b491222c8b95483e82f5[0m  
+6dc5e2cb76deb0f120b444e36cf7bd99b5b44f[0m  
+
+./.git/objects/e5:
+[34m[47m.[0m  [34m[47m..[0m  b62998731c04c7d4141a6ec62adfa20ef2ccb6[0m  
+b38024bf0396fe31f97d7099d417abb964159b[0m  
+
+./.git/objects/41:
+[34m[47m.[0m  [34m[47m..[0m  2e79aa384e99c847e892b0b3e31f5d69da80ff[0m  
+3bad3b86bd47aa6996ec14a47339b0827db392[0m  
+e1b2f96797bc858f6a771dfe33dbfff36d9108[0m  
+
+./.git/objects/37:
+[34m[47m.[0m  [34m[47m..[0m  43a408b2c8978ab49a16800d4ab22029f13f52[0m  
+
+./.git/objects/46:
+[34m[47m.[0m  [34m[47m..[0m  6c83e318169ed62e35c6d3689bcadafa16c87c[0m  
+eccf277e9a39c86cc10a7269baec1dea326da4[0m  
+
+./.git/objects/4c:
+[34m[47m.[0m  [34m[47m..[0m  3b848c627dae000baec2802c64c85690193e0e[0m  
+f62036f6507a930b2731632f9ee1a0f2942604[0m  
+
+./.git/objects/25:
+[34m[47m.[0m  [34m[47m..[0m  98df888d97a09c9c67f741453413ff3da9be52[0m  
+b214aa554928d6ea2e46a8516f58b2d618a30b[0m  
+
+./.git/objects/2b:
+[34m[47m.[0m  [34m[47m..[0m  1e96007e835ca5afaba613e182c4aaec49b3e2[0m  
+dd0831a0e70fc62f2682f3cf8f64e77164cc0a[0m  
+
+./.git/objects/13:
+[34m[47m.[0m  [34m[47m..[0m  789293aa3f2b05605ee1feec995d1e2d8a8242[0m  
+bac07a94203a5ac8f2cdd2c5752d49c4f62457[0m  
+
+./.git/objects/8a:
+[34m[47m.[0m  [34m[47m..[0m  70af59cd9e3463833faadb6df43409f089f5fa[0m  
+
+./.git/objects/a3:
+[34m[47m.[0m  [34m[47m..[0m  a5985222dc38bdd3947bef5db91e650f8afc54[0m  
+
+./.git/objects/91:
+[34m[47m.[0m  [34m[47m..[0m  20bd6e84940381118ee19e9df3733e698a175b[0m  
+450d75ba107aa0d460495fbf70ee8642862574[0m  
+b7f576497aa17082b0749e7bae56bd7b7b7e4f[0m  
+
+./.git/objects/9e:
+[34m[47m.[0m  [34m[47m..[0m  10c7a7fa2f1fb969b7fc3c7719b84239a35e95[0m  
+e1c968180126d54ed8f8814a7f0b1e240cde5a[0m  
+
+./.git/objects/38:
+[34m[47m.[0m  [34m[47m..[0m  5e54369031cfee69927d6b3bcc55d7e677d9ca[0m  
+
+./.git/objects/62:
+[34m[47m.[0m  [34m[47m..[0m  e32dd716c7a72e0f88cd7f1ba4ae6398f3a90f[0m  
+e9bf19e2affb76466119be3aca98ba57bc795d[0m  
+e9fc4b7daae522c81dc7731333de08000662d6[0m  
+
+./.git/objects/97:
+[34m[47m.[0m  [34m[47m..[0m  07e5ab579f2456c7995f02bf5c3addd01c7e80[0m  
+cfb411422a6deeeb762c37df5b4224e0e76fef[0m  
+
+./.git/objects/59:
+[34m[47m.[0m  [34m[47m..[0m  8a8f22ccac1b926408422ad0d6802e0ba6cf72[0m  
+
+./.git/objects/d3:
+[34m[47m.[0m  [34m[47m..[0m  3b50dcef15abf779bc3ebaaea8b6ce9ac7cc67[0m  
+8e87966e2bf55139182f067f8666c33c91ce0b[0m  
+
+./.git/objects/71:
+[34m[47m.[0m  [34m[47m..[0m  3fd08118b089e21e6b986a266ce930311e02b5[0m  
+8ce186a7d4e968b808ece6edd62c3841ef01ca[0m  
+
+./.git/objects/bb:
+[34m[47m.[0m  [34m[47m..[0m  613dd89eed22933777c81278415fd513a65ad1[0m  
+
+./.git/objects/ab:
+[34m[47m.[0m  [34m[47m..[0m  1355fb4c8db55f093e13fa33d1fc86391ce59d[0m  
+
+./.git/objects/30:
+[34m[47m.[0m  [34m[47m..[0m  50358b1e8620db78d7f0aa4000608e4faf6ba7[0m  
+
+./.git/objects/03:
+[34m[47m.[0m  [34m[47m..[0m  50ed1121f8e1089b6fa34637c136d5257e30fa[0m  
+
+./.git/objects/f9:
+[34m[47m.[0m  [34m[47m..[0m  bd36c75ccf0f5e949cb94d40bb8ac0d27d302f[0m  
+
+./.git/objects/b8:
+[34m[47m.[0m  [34m[47m..[0m  22466bd41100cb20e5bcf5e7087351ea40f00d[0m  
+c9b39d6b02087f15ca94ca14bbb9a85d02112a[0m  
+
+./.git/objects/88:
+[34m[47m.[0m  [34m[47m..[0m  7a8992769093319d43e0ac6a6ffa5320e5aa88[0m  
+f65df540c57bf192419d579ca20ca75c1e3aeb[0m  
+
+./.git/objects/b1:
+[34m[47m.[0m  [34m[47m..[0m  0689c50a0962a04a2dd6b62eaa4e5cf9923b07[0m  
+f2dc199e7c708497a0a847f8f6381a7afd099b[0m  
+
+./.git/objects/6d:
+[34m[47m.[0m  [34m[47m..[0m  78c1f090382bceddcf16081114711063916d66[0m  
+
+./.git/objects/9f:
+[34m[47m.[0m  [34m[47m..[0m  520cd44775991cfb23650dffcdc2b9d46e4646[0m  
+75bb6754ca173f03321750fe5969dbce02185d[0m  
+
+./.git/objects/7c:
+[34m[47m.[0m  [34m[47m..[0m  384834ba5f83a8e19e26898879b331d72b5907[0m  
+
+./.git/objects/f1:
+[34m[47m.[0m  [34m[47m..[0m  98ca7626ecc0225f29a5903e729ca9264bd1ec[0m  
+c13e940592e95964d3ce43ffb8d5840656571e[0m  
+
+./.git/objects/02:
+[34m[47m.[0m  [34m[47m..[0m  f0a62d733bc737b56a887bf5bf02747af8582c[0m  
+
+./.git/objects/ba:
+[34m[47m.[0m  [34m[47m..[0m  55c74e2d1f006cc58f6df74eede288cef86c62[0m  
+
+./.git/objects/eb:
+[34m[47m.[0m  [34m[47m..[0m  7aaba73225f97024d33c2a13c36307b3bfe08a[0m  
+
+./.git/objects/1f:
+[34m[47m.[0m  [34m[47m..[0m  b259bc72f09147250b0ffb13c729ca285747ef[0m  
+
+./.git/objects/58:
+[34m[47m.[0m  [34m[47m..[0m  1b16f9e07d4ba16850cf64608074cdd52fe16d[0m  
+2aa8e4747d506b2162cee9b08bdda8c8c7bc53[0m  
+
+./.git/objects/f8:
+[34m[47m.[0m  [34m[47m..[0m  57dbd750cfc916e6093f0a242b95a0833a7f72[0m  
+
+./.git/objects/76:
+[34m[47m.[0m  [34m[47m..[0m  57f9be1b1f46d87e6f490cdab6bcd98b377f04[0m  
+89abbf428407b172c7c26361bcd5ea3df471f4[0m  
+cbca5f4f0658159d24290fa2dba593cc0c35f7[0m  
+
+./.git/objects/df:
+[34m[47m.[0m  [34m[47m..[0m  958a2c2c6ea3016bae402d085af8ab031aa2d2[0m  
+
+./.git/objects/d7:
+[34m[47m.[0m  [34m[47m..[0m  565a6b14d5da96594c69cbbc3aaeacab66cea6[0m  
+
+./.git/objects/01:
+[34m[47m.[0m  [34m[47m..[0m  d4e11e56047009b4e79d2e70bbc45939c8a7a1[0m  
+
+./.git/objects/c3:
+[34m[47m.[0m  [34m[47m..[0m  ebb3cd555bb369a92455774eaa03286a6cd5a2[0m  
+
+./.git/objects/52:
+[34m[47m.[0m  [34m[47m..[0m  654c67a776fc4d182aa18600273081e65f1102[0m  
+86609b4c28afc9f3c50aaf174c38ed5e3f367a[0m  
+
+./.git/objects/b2:
+[34m[47m.[0m  [34m[47m..[0m  03bd5334fe91257c8d7b701968a861382c6e9e[0m  
+a71263127e103cbf4749feb88313c87e241dca[0m  
+
+./.git/objects/4a:
+[34m[47m.[0m  [34m[47m..[0m  fcbcaffe3021835358c8e4790344f8cd8bad74[0m  
+
+./.git/objects/dc:
+[34m[47m.[0m  [34m[47m..[0m  8c1974fc9455dbab0fd165f8964bd6d8c1c88d[0m  
+
+./.git/objects/e2:
+[34m[47m.[0m  [34m[47m..[0m  bcddb7e9a11002633147b3dbe91f2f764e2b79[0m  
+
+./.git/objects/82:
+[34m[47m.[0m  [34m[47m..[0m  8727e80521ef6c2fabd99a6b7117124a820c16[0m  
+
+./.git/objects/bc:
+[34m[47m.[0m  [34m[47m..[0m  0617a58b90055d8827be66d942493deaa6f473[0m  
+cd2f2670790199b74b6bd09656a9dcd3556e41[0m  
+d78803271097630931ed90ea2c688c824e6974[0m  
+
+./.git/objects/19:
+[34m[47m.[0m  [34m[47m..[0m  2618641aebf526863968e4fa8221075d03265a[0m  
+95b8e72c29839567e69b940443c360ae0e1b1b[0m  
+
+./.git/objects/56:
+[34m[47m.[0m  [34m[47m..[0m  b5e2f057f9fdcd392d639c9099c65c0a3d92a5[0m  
+
+./.git/objects/ca:
+[34m[47m.[0m  [34m[47m..[0m  914ec62c591f5a35739aa9c6efef63d3de0d84[0m  
+d13ad5dadc487a9821f59a23dbcdbf88a880fe[0m  
+
+./.git/objects/fd:
+[34m[47m.[0m  [34m[47m..[0m  35b816d71fa4acac8825c0c72d5467a40b507d[0m  
+aaeca262cc3c986ca3a0f531b6c1d8147a749a[0m  
+a64929279049cc84679a1b96ad14d2694d213d[0m  
+
+./.git/objects/2e:
+[34m[47m.[0m  [34m[47m..[0m  a002cbc84f65c66d22af56a57563b0e882bf3f[0m  
+e72f97e29e6841a88ae63a5ef3cc18eb7afcf7[0m  
+
+./.git/objects/89:
+[34m[47m.[0m  [34m[47m..[0m  032e4a8dc9c56371f8d58bde78b10098526b82[0m  
+
+./.git/objects/aa:
+[34m[47m.[0m  [34m[47m..[0m  4954c955adffa13a65ecc6982156d4804b40ad[0m  
+6701892117395111945f767690124d5317e4b7[0m  
+
+./.git/objects/6e:
+[34m[47m.[0m  [34m[47m..[0m  a33c2e95f7e1339863f8581849fe0c03ccaea8[0m  
+
+./.git/objects/f0:
+[34m[47m.[0m  [34m[47m..[0m  72e7df359b5cff186e797183aafe526efb068d[0m  
+89e60a87e35fcbb14da730bdd0d7c02e2ef460[0m  
+
+./.git/objects/57:
+[34m[47m.[0m  [34m[47m..[0m  ea89722e3e1db055cfcc48d4cf0a878d3f66b5[0m  
+
+./.git/objects/93:
+[34m[47m.[0m  [34m[47m..[0m  0acb3d098f332b73e6e48a97c9c427347686a7[0m  
+e3e9d4ad148b657da85a7bdd1247b6ff2aa40c[0m  
+
+./.git/objects/21:
+[34m[47m.[0m  [34m[47m..[0m  e36ee2a16c9f3b8918566206f8e762f80272de[0m  
+
+./.git/objects/20:
+[34m[47m.[0m  [34m[47m..[0m  c42550bf2c0dfb7f26c73ebc6e506f1e6a76c8[0m  
+
+./.git/objects/64:
+[34m[47m.[0m  [34m[47m..[0m  90c57804e5313acbdbd740e76363875fdea541[0m  
+
+./.git/objects/94:
+[34m[47m.[0m  [34m[47m..[0m  0d2ab3796333ef93030a0e83511b4c90784327[0m  
+
+./.git/objects/15:
+[34m[47m.[0m  [34m[47m..[0m  35dc61f4e330ccbfb66f80188d6b27eb64570a[0m  
+
+./.git/objects/f6:
+[34m[47m.[0m  [34m[47m..[0m  7e34fff08c5b537f8dad4798ab3281ed483123[0m  
+d23414459241a1ceaeeee5ffabb5080ca19db5[0m  
+
+./.git/objects/fb:
+[34m[47m.[0m  [34m[47m..[0m  b6ef5f0e15bed920399d2840b682ea0e4b001e[0m  
+
+./.git/objects/be:
+[34m[47m.[0m  [34m[47m..[0m  3a75391a18bac525494e108547a10a43a10078[0m  
+
+./.git/objects/3c:
+[34m[47m.[0m  [34m[47m..[0m  24fd29c8fb552ca1af3c8c4feb1c5da5d163be[0m  
+
+./.git/objects/4e:
+[34m[47m.[0m  [34m[47m..[0m  6fa3fa6d408514515661ae6e928e0a5fcbbf0d[0m  
+
+./.git/objects/fc:
+[34m[47m.[0m  [34m[47m..[0m  610eb5f40f03b72421188e611d3215da0d94b4[0m  
+
+./.git/objects/7f:
+[34m[47m.[0m  [34m[47m..[0m  b28ea023eedb9a4a02c6e3f01f4f64cae1a03a[0m  
+db794d974d7603776cb3de3c41300f00fb6df0[0m  
+
+./.git/objects/ae:
+[34m[47m.[0m  [34m[47m..[0m  2e65f900a976d957ddb57ac0c694de9761edac[0m  
+701896240d79b786205b33d03aaf64804abf41[0m  
+7ba1b9f98448a03a50230381e443ba5ca41aa7[0m  
+
+./.git/objects/34:
+[34m[47m.[0m  [34m[47m..[0m  4a906080e2df65d7441b4726ec2879d0c491fb[0m  
+7ecd1adcb729e525ba9d78694a56a6e32886f0[0m  
+
+./.git/objects/81:
+[34m[47m.[0m  [34m[47m..[0m  02bd07e5c88b9010f8edfc745536673c73ab33[0m  
+
+./.git/objects/44:
+[34m[47m.[0m  [34m[47m..[0m  6ac512ed6c82fbe25f3622a29125088ef3d459[0m  
+
+./.git/objects/d9:
+[34m[47m.[0m  [34m[47m..[0m  1920330ff385d53d4f996652a7fb54ddca7583[0m  
+
+./.git/objects/72:
+[34m[47m.[0m  [34m[47m..[0m  682db08d934fb488f9bf82866315215393594e[0m  
+
+./.git/objects/da:
+[34m[47m.[0m  [34m[47m..[0m  45331921e3d141c2ef781c4d3574b1adcb93d4[0m  
+
+./.git/objects/af:
+[34m[47m.[0m  [34m[47m..[0m  c5c472ac701daba0815555977a689d0fd0fe70[0m  
+
+./.git/objects/6f:
+[34m[47m.[0m  [34m[47m..[0m  a71ff9c0f30740def5ffe97ecf6ddd50fac0bf[0m  
+
+./.git/objects/35:
+[34m[47m.[0m  [34m[47m..[0m  8e41e19a2d0166d96cfb80346dd00f6161ae9d[0m  
+
+./.git/objects/d2:
+[34m[47m.[0m  [34m[47m..[0m  6d5368eb168f86b969af80cc35e0bac1a194da[0m  
+
+./.git/objects/a5:
+[34m[47m.[0m  [34m[47m..[0m  1fac6e30c47e13abc09d4b23033370c90adc32[0m  
+8688c4a2da7af6c86705dc2cb0ca01eeacd2e3[0m  
+
+./.git/objects/61:
+[34m[47m.[0m  [34m[47m..[0m  529733a81f9bda8969d68d086f881cc6c09ebd[0m  
+
+./.git/objects/c7:
+[34m[47m.[0m  [34m[47m..[0m  de8a62e6813ef599f073adc7920be435f4d50f[0m  
+
+./.git/objects/92:
+[34m[47m.[0m  [34m[47m..[0m  a7ec2bd3a540457c641fbd6ceef0a84464695c[0m  
+
+./.git/objects/55:
+[34m[47m.[0m  [34m[47m..[0m  65c3d29b861b05236f4ae785742178fef95416[0m  
+
+./.git/objects/c1:
+[34m[47m.[0m  [34m[47m..[0m  efa1e172c8bef64b45c00fd96020209d40c6bd[0m  
+
+./.git/objects/2c:
+[34m[47m.[0m  [34m[47m..[0m  3b18fbd4bf9c2790eecc36046d29713bbaa271[0m  
+
+./.git/objects/07:
+[34m[47m.[0m  [34m[47m..[0m  b54ebe53485bc6a69176df979760f6556afd77[0m  
+
+./.git/objects/32:
+[34m[47m.[0m  [34m[47m..[0m  9642ccd31e02d7055891a9801d636884e69928[0m  
+
+./.git/objects/14:
+[34m[47m.[0m  [34m[47m..[0m  e8fe9eed3141addd2ad4e57a0286c4181c8f0a[0m  
+
+./.git/objects/24:
+[34m[47m.[0m  [34m[47m..[0m  4c4cb1ac9f516160992b1cbb219bdce5ea7a32[0m  
+
+./.git/objects/dd:
+[34m[47m.[0m  [34m[47m..[0m  f775082df00e619299dbe2772b74f57de292ca[0m  
+
+./.git/logs:
+[34m[47m.[0m  [34m[47m..[0m  HEAD[0m  [34mrefs[0m  
+
+./.git/logs/refs:
+[34m[47m.[0m  [34m[47m..[0m  [34mheads[0m  [34mremotes[0m  
+
+./.git/logs/refs/heads:
+[34m[47m.[0m  [34m[47m..[0m  exec[0m  ls[0m  master[0m  
+
+./.git/logs/refs/remotes:
+[34m[47m.[0m  [34m[47m..[0m  [34morigin[0m  
+
+./.git/logs/refs/remotes/origin:
+[34m[47m.[0m  [34m[47m..[0m  exec[0m  ls[0m  master[0m  new[0m  
+
+./src:
+[34m[47m.[0m  [34m[47m..[0m  [32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+
+./tests:
+[34m[47m.[0m  [34m[47m..[0m  [47m.nfs00000000012f2f5a00000059[0m  exec.script[0m  ls.script[0m  
+
+./bin:
+[34m[47m.[0m  [34m[47m..[0m  [32mls[0m  [32mrshell[0m  
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -aR[K[KRl
+.:
+size = 40
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 bin
+-rw------- 1 phung001 csmajs 18047 Apr 14 03:50 LICENSE
+-rw------- 1 phung001 csmajs 297   May  2 02:21 Makefile
+-rw------- 1 phung001 csmajs 1970  Apr 26 00:57 README.md
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 src
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 tests
+
+./src:
+size = 132
+-rwx------ 1 phung001 csmajs 75409 May  2 03:10 a.out
+-rw------- 1 phung001 csmajs 26471 Apr 29 06:33 cp.cpp
+-rw------- 1 phung001 csmajs 7253  May  2 05:27 ls.cpp
+-rw------- 1 phung001 csmajs 4148  Apr 26 00:51 terminal.cpp
+-rw------- 1 phung001 csmajs 4875  Apr 29 06:33 timer.h
+
+./tests:
+size = 8
+-rw------- 1 phung001 csmajs 4980 Apr 20 06:38 exec.script
+-rw------- 1 phung001 csmajs 0    May  2 06:06 ls.script
+
+./bin:
+size = 112
+-rwx------ 1 phung001 csmajs 76145 May  2 06:06 ls
+-rwx------ 1 phung001 csmajs 29907 May  2 06:06 rshell
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -Rla
+.:
+size = 52
+drwx------ 6 phung001 csmajs 4096  May  2 06:06 .
+drwx------ 6 phung001 csmajs 4096  Apr 14 03:50 ..
+drwx------ 8 phung001 csmajs 4096  May  2 03:21 .git
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 bin
+-rw------- 1 phung001 csmajs 18047 Apr 14 03:50 LICENSE
+-rw------- 1 phung001 csmajs 297   May  2 02:21 Makefile
+-rw------- 1 phung001 csmajs 1970  Apr 26 00:57 README.md
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 src
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 tests
+
+./.git:
+size = 52
+drwx------ 8   phung001 csmajs 4096 May  2 03:21 .
+drwx------ 6   phung001 csmajs 4096 May  2 06:06 ..
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 branches
+-rw------- 1   phung001 csmajs 259  Apr 29 04:29 config
+-rw------- 1   phung001 csmajs 24   May  2 03:21 COMMIT_EDITMSG
+-rw------- 1   phung001 csmajs 73   Apr 14 03:50 description
+-rw------- 1   phung001 csmajs 92   May  1 21:30 FETCH_HEAD
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 hooks
+-rw------- 1   phung001 csmajs 19   Apr 29 06:33 HEAD
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 info
+-rw------- 1   phung001 csmajs 648  May  2 03:21 index
+drwx------ 3   phung001 csmajs 4096 Apr 14 03:50 logs
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 objects
+-rw------- 1   phung001 csmajs 41   May  1 21:30 ORIG_HEAD
+-rw------- 1   phung001 csmajs 160  Apr 14 03:50 packed-refs
+drwx------ 5   phung001 csmajs 4096 Apr 14 03:50 refs
+
+./.git/refs:
+size = 20
+drwx------ 5 phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 8 phung001 csmajs 4096 May  2 03:21 ..
+drwx------ 2 phung001 csmajs 4096 May  2 03:21 heads
+drwx------ 3 phung001 csmajs 4096 Apr 14 03:50 remotes
+drwx------ 2 phung001 csmajs 4096 Apr 20 06:54 tags
+
+./.git/refs/heads:
+size = 8
+drwx------ 2 phung001 csmajs 4096 May  2 03:21 .
+drwx------ 5 phung001 csmajs 4096 Apr 14 03:50 ..
+-rw------- 1 phung001 csmajs 41   Apr 20 06:37 exec
+-rw------- 1 phung001 csmajs 41   May  2 03:21 ls
+-rw------- 1 phung001 csmajs 41   Apr 29 06:32 master
+
+./.git/refs/tags:
+size = 8
+drwx------ 2 phung001 csmajs 4096 Apr 20 06:54 .
+drwx------ 5 phung001 csmajs 4096 Apr 14 03:50 ..
+-rw------- 1 phung001 csmajs 41   Apr 20 06:54 hw0
+
+./.git/refs/remotes:
+size = 12
+drwx------ 3 phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 5 phung001 csmajs 4096 Apr 14 03:50 ..
+drwx------ 2 phung001 csmajs 4096 May  2 03:22 origin
+
+./.git/refs/remotes/origin:
+size = 8
+drwx------ 2 phung001 csmajs 4096 May  2 03:22 .
+drwx------ 3 phung001 csmajs 4096 Apr 14 03:50 ..
+-rw------- 1 phung001 csmajs 41   Apr 20 06:52 exec
+-rw------- 1 phung001 csmajs 32   Apr 14 03:50 HEAD
+-rw------- 1 phung001 csmajs 41   May  2 03:22 ls
+-rw------- 1 phung001 csmajs 41   Apr 30 03:51 master
+-rw------- 1 phung001 csmajs 41   Apr 29 04:18 new
+
+./.git/branches:
+size = 8
+drwx------ 2 phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 8 phung001 csmajs 4096 May  2 03:21 ..
+
+./.git/info:
+size = 12
+drwx------ 2 phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 8 phung001 csmajs 4096 May  2 03:21 ..
+-rw------- 1 phung001 csmajs 240  Apr 14 03:50 exclude
+
+./.git/hooks:
+size = 52
+drwx------ 2 phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 8 phung001 csmajs 4096 May  2 03:21 ..
+-rwx------ 1 phung001 csmajs 452  Apr 14 03:50 applypatch-msg.sample
+-rwx------ 1 phung001 csmajs 896  Apr 14 03:50 commit-msg.sample
+-rwx------ 1 phung001 csmajs 548  Apr 14 03:50 post-receive.sample
+-rwx------ 1 phung001 csmajs 4951 Apr 14 03:50 pre-rebase.sample
+-rwx------ 1 phung001 csmajs 1239 Apr 14 03:50 prepare-commit-msg.sample
+-rwx------ 1 phung001 csmajs 160  Apr 14 03:50 post-commit.sample
+-rwx------ 1 phung001 csmajs 398  Apr 14 03:50 pre-applypatch.sample
+-rwx------ 1 phung001 csmajs 1578 Apr 14 03:50 pre-commit.sample
+-rwx------ 1 phung001 csmajs 189  Apr 14 03:50 post-update.sample
+-rwx------ 1 phung001 csmajs 3611 Apr 14 03:50 update.sample
+
+./.git/objects:
+size = 464
+drwx------ 8   phung001 csmajs 4096 May  2 03:21 ..
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 .
+drwx------ 2   phung001 csmajs 4096 Apr 20 02:57 02
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:28 01
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:36 07
+drwx------ 2   phung001 csmajs 4096 Apr 20 01:25 03
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:02 1f
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:32 19
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 15
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:30 13
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 14
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 2e
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 2d
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 26
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 2c
+drwx------ 2   phung001 csmajs 4096 Apr 19 06:16 2b
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:35 25
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 24
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 20
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 21
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 3c
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 36
+drwx------ 2   phung001 csmajs 4096 Apr 19 06:16 38
+drwx------ 2   phung001 csmajs 4096 Apr 19 01:03 37
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:26 34
+drwx------ 2   phung001 csmajs 4096 Apr 19 08:22 3a
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:39 30
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 3e
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:36 32
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:31 35
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:30 4a
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 45
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:54 4e
+drwx------ 2   phung001 csmajs 4096 Apr 20 04:16 4c
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 46
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:32 41
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 44
+drwx------ 2   phung001 csmajs 4096 Apr 15 05:39 4f
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 55
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 52
+drwx------ 2   phung001 csmajs 4096 Apr 19 08:23 59
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 57
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 58
+drwx------ 2   phung001 csmajs 4096 Apr 20 04:16 56
+drwx------ 2   phung001 csmajs 4096 Apr 20 02:56 6d
+drwx------ 2   phung001 csmajs 4096 Apr 29 07:28 61
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 65
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:37 6e
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 64
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:54 62
+drwx------ 2   phung001 csmajs 4096 Apr 15 05:41 69
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 6f
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 7f
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 72
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 76
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:22 71
+drwx------ 2   phung001 csmajs 4096 Apr 20 02:57 7c
+drwx------ 2   phung001 csmajs 4096 Apr 16 18:58 7b
+drwx------ 2   phung001 csmajs 4096 Apr 15 05:41 73
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:34 82
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:37 89
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 88
+drwx------ 2   phung001 csmajs 4096 Apr 19 02:48 8a
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 81
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:30 85
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 8c
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 9f
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:26 93
+drwx------ 2   phung001 csmajs 4096 Apr 29 07:28 97
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 90
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 94
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 91
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:37 9e
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 92
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 af
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:39 ab
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 aa
+drwx------ 2   phung001 csmajs 4096 Apr 19 02:48 a3
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 a5
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 ae
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 be
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:02 ba
+drwx------ 2   phung001 csmajs 4096 Apr 26 01:21 b8
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:30 b2
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:30 b1
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 bc
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:39 bb
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 ce
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 c1
+drwx------ 2   phung001 csmajs 4096 Apr 29 07:28 c7
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:53 ca
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 c4
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:36 cd
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:28 c3
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 dd
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:21 df
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:32 d2
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:22 d7
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:38 d3
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 d9
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:34 dc
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 da
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 e5
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:34 e2
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:02 eb
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 e6
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 f0
+drwx------ 2   phung001 csmajs 4096 Apr 20 01:26 f9
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 f6
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 fb
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:12 f8
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 fd
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 f1
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 fc
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 info
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 pack
+
+./.git/objects/pack:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+
+./.git/objects/info:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+
+./.git/objects/36:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 222  Apr 14 03:50 6b3d3ff61cc0ab094c7287b43b5d685119860c
+
+./.git/objects/c4:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 184  Apr 14 03:50 514d41c6a985294666e0b7e141e0b166262ee0
+
+./.git/objects/ce:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 123  Apr 14 03:50 5950a27ef88b553e2c861d3b4ac51d7d44d146
+
+./.git/objects/65:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 130  Apr 14 03:50 aa6ebd95b4718bf56012e262d92f93a3d2191a
+-r-------- 1   phung001 csmajs 177  Apr 26 00:58 d6ca235da22b2a0f0d7d61284dacc2520cda7a
+
+./.git/objects/8c:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 7713 Apr 14 03:50 db8451d9b90c1d4000c6f22eb86471a4568be6
+
+./.git/objects/e6:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 15   Apr 14 03:50 9de29bb2d1d6434b8b29ae775ad8c2e48c5391
+
+./.git/objects/45:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 56   Apr 14 03:50 6304a38fee4ac8e805f177a59b49c40c150ece
+
+./.git/objects/90:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 14 03:50 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 156  Apr 14 03:50 6bdd3c963a11b2937e3e66fb06fd15967ebcaa
+
+./.git/objects/2d:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 141  Apr 30 03:51 3fdbd52cf2d386fb32f3b9a303ec83610f0854
+-r-------- 1   phung001 csmajs 52   Apr 14 03:50 47279f2e6e3e22080b6c75884ac7403bdb9318
+
+./.git/objects/26:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 205  Apr 14 23:09 8d0e8358f520684cecb1ec363faa36384106ac
+-r-------- 1   phung001 csmajs 177  Apr 29 21:31 890be0338b19dde6c4e2dee2a0777125cf3553
+-r-------- 1   phung001 csmajs 212  Apr 20 06:52 b2f10b535107f4ce076bfd8cde88d38bb3a350
+
+./.git/objects/85:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:30 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 03:30 3429fbf73386a97a1dec6d3c9d2be47dd47be0
+-r-------- 1   phung001 csmajs 164  Apr 14 23:12 9bd04f5a501e42d17b8a06939b070917aae7e5
+
+./.git/objects/cd:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:36 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 177  Apr 30 17:36 86dbb1f4efebc21c6463b70e527a50dbd4f866
+-r-------- 1   phung001 csmajs 168  Apr 14 23:12 ef7cab56bc4278ae9031799bfaae6b79302ad0
+
+./.git/objects/3e:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 141  Apr 29 04:18 3b1ab58ef90fbd6c11f3b4453e8804e2ac4f10
+-r-------- 1   phung001 csmajs 182  Apr 15 05:39 89ce472d81f9b42abcbc00363c7c0d403465e4
+
+./.git/objects/4f:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 15 05:39 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 258  Apr 15 05:39 f0d27104062c01260dc3ffc8957b74031a9d71
+
+./.git/objects/69:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 15 05:41 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 185  Apr 15 05:41 c4af5ed39e6255d687041920c2a38675b08f0d
+
+./.git/objects/73:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 15 05:41 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 195  Apr 15 05:41 21d2f61752145a3663fa6e1c2b40eb94560eaa
+
+./.git/objects/7b:
+size = 44
+drwx------ 2   phung001 csmajs 4096  Apr 16 18:58 .
+drwx------ 116 phung001 csmajs 4096  May  2 03:21 ..
+-r-------- 1   phung001 csmajs 34899 Apr 16 18:58 ffaf07f66b25f42fa9d6a2072fb18e14681c39
+
+./.git/objects/3a:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 19 08:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 456  Apr 16 18:58 43ea92cef89afa85b4b491222c8b95483e82f5
+-r-------- 1   phung001 csmajs 1178 Apr 19 08:22 6dc5e2cb76deb0f120b444e36cf7bd99b5b44f
+
+./.git/objects/e5:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 16 19:01 b62998731c04c7d4141a6ec62adfa20ef2ccb6
+-r-------- 1   phung001 csmajs 578  Apr 29 04:18 b38024bf0396fe31f97d7099d417abb964159b
+
+./.git/objects/41:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:32 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 213  Apr 16 19:01 2e79aa384e99c847e892b0b3e31f5d69da80ff
+-r-------- 1   phung001 csmajs 167  Apr 29 06:32 3bad3b86bd47aa6996ec14a47339b0827db392
+-r-------- 1   phung001 csmajs 171  Apr 16 19:01 e1b2f96797bc858f6a771dfe33dbfff36d9108
+
+./.git/objects/37:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 19 01:03 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 747  Apr 19 01:03 43a408b2c8978ab49a16800d4ab22029f13f52
+
+./.git/objects/46:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 119  Apr 19 01:05 6c83e318169ed62e35c6d3689bcadafa16c87c
+-r-------- 1   phung001 csmajs 1323 Apr 30 03:51 eccf277e9a39c86cc10a7269baec1dea326da4
+
+./.git/objects/4c:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 04:16 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 04:16 3b848c627dae000baec2802c64c85690193e0e
+-r-------- 1   phung001 csmajs 57   Apr 19 01:08 f62036f6507a930b2731632f9ee1a0f2942604
+
+./.git/objects/25:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:35 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 1372 Apr 30 17:35 98df888d97a09c9c67f741453413ff3da9be52
+-r-------- 1   phung001 csmajs 147  Apr 19 01:08 b214aa554928d6ea2e46a8516f58b2d618a30b
+
+./.git/objects/2b:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 19 06:16 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 195  Apr 19 01:08 1e96007e835ca5afaba613e182c4aaec49b3e2
+-r-------- 1   phung001 csmajs 184  Apr 19 06:16 dd0831a0e70fc62f2682f3cf8f64e77164cc0a
+
+./.git/objects/13:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:30 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 906  Apr 19 02:47 789293aa3f2b05605ee1feec995d1e2d8a8242
+-r-------- 1   phung001 csmajs 177  Apr 29 04:30 bac07a94203a5ac8f2cdd2c5752d49c4f62457
+
+./.git/objects/8a:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 19 02:48 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 19 02:48 70af59cd9e3463833faadb6df43409f089f5fa
+
+./.git/objects/a3:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 19 02:48 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 19 02:48 a5985222dc38bdd3947bef5db91e650f8afc54
+
+./.git/objects/91:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 168  Apr 29 06:32 20bd6e84940381118ee19e9df3733e698a175b
+-r-------- 1   phung001 csmajs 174  Apr 19 02:48 450d75ba107aa0d460495fbf70ee8642862574
+-r-------- 1   phung001 csmajs 174  Apr 29 21:31 b7f576497aa17082b0749e7bae56bd7b7b7e4f
+
+./.git/objects/9e:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:37 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 970  Apr 19 06:16 10c7a7fa2f1fb969b7fc3c7719b84239a35e95
+-r-------- 1   phung001 csmajs 176  Apr 20 06:37 e1c968180126d54ed8f8814a7f0b1e240cde5a
+
+./.git/objects/38:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 19 06:16 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 19 06:16 5e54369031cfee69927d6b3bcc55d7e677d9ca
+
+./.git/objects/62:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:54 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 19 06:16 e32dd716c7a72e0f88cd7f1ba4ae6398f3a90f
+-r-------- 1   phung001 csmajs 1408 Apr 20 04:15 e9bf19e2affb76466119be3aca98ba57bc795d
+-r-------- 1   phung001 csmajs 176  Apr 20 06:54 e9fc4b7daae522c81dc7731333de08000662d6
+
+./.git/objects/97:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 07:28 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 19 08:23 07e5ab579f2456c7995f02bf5c3addd01c7e80
+-r-------- 1   phung001 csmajs 176  Apr 29 07:28 cfb411422a6deeeb762c37df5b4224e0e76fef
+
+./.git/objects/59:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 19 08:23 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 19 08:23 8a8f22ccac1b926408422ad0d6802e0ba6cf72
+
+./.git/objects/d3:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:38 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 176  Apr 19 08:23 3b50dcef15abf779bc3ebaaea8b6ce9ac7cc67
+-r-------- 1   phung001 csmajs 1440 Apr 19 23:38 8e87966e2bf55139182f067f8666c33c91ce0b
+
+./.git/objects/71:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 03:22 3fd08118b089e21e6b986a266ce930311e02b5
+-r-------- 1   phung001 csmajs 127  Apr 19 23:38 8ce186a7d4e968b808ece6edd62c3841ef01ca
+
+./.git/objects/bb:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:39 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 56   Apr 19 23:39 613dd89eed22933777c81278415fd513a65ad1
+
+./.git/objects/ab:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:39 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 19 23:39 1355fb4c8db55f093e13fa33d1fc86391ce59d
+
+./.git/objects/30:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 19 23:39 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 190  Apr 19 23:39 50358b1e8620db78d7f0aa4000608e4faf6ba7
+
+./.git/objects/03:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 01:25 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 1489 Apr 20 01:25 50ed1121f8e1089b6fa34637c136d5257e30fa
+
+./.git/objects/f9:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 01:26 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 127  Apr 20 01:26 bd36c75ccf0f5e949cb94d40bb8ac0d27d302f
+
+./.git/objects/b8:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 26 01:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 20 01:26 22466bd41100cb20e5bcf5e7087351ea40f00d
+-r-------- 1   phung001 csmajs 459  Apr 26 01:21 c9b39d6b02087f15ca94ca14bbb9a85d02112a
+
+./.git/objects/88:
+size = 16
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 176  May  2 03:21 7a8992769093319d43e0ac6a6ffa5320e5aa88
+-r-------- 1   phung001 csmajs 147  Apr 20 01:26 f65df540c57bf192419d579ca20ca75c1e3aeb
+
+./.git/objects/b1:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:30 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 178  Apr 20 01:26 0689c50a0962a04a2dd6b62eaa4e5cf9923b07
+-r-------- 1   phung001 csmajs 142  Apr 29 04:30 f2dc199e7c708497a0a847f8f6381a7afd099b
+
+./.git/objects/6d:
+do_ypcall: clnt_call: RPC: Unable to send; errno = Operation not permitted
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 02:56 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 901  Apr 20 02:56 78c1f090382bceddcf16081114711063916d66
+
+./.git/objects/9f:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 202  Apr 20 06:52 520cd44775991cfb23650dffcdc2b9d46e4646
+-r-------- 1   phung001 csmajs 1506 Apr 20 02:56 75bb6754ca173f03321750fe5969dbce02185d
+
+./.git/objects/7c:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 20 02:57 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 56   Apr 20 02:57 384834ba5f83a8e19e26898879b331d72b5907
+
+./.git/objects/f1:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 02:57 98ca7626ecc0225f29a5903e729ca9264bd1ec
+-r-------- 1   phung001 csmajs 180  Apr 20 06:52 c13e940592e95964d3ce43ffb8d5840656571e
+
+./.git/objects/02:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 02:57 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 169  Apr 20 02:57 f0a62d733bc737b56a887bf5bf02747af8582c
+
+./.git/objects/ba:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:02 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 911  Apr 20 03:02 55c74e2d1f006cc58f6df74eede288cef86c62
+
+./.git/objects/eb:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:02 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 03:02 7aaba73225f97024d33c2a13c36307b3bfe08a
+
+./.git/objects/1f:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:02 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 173  Apr 20 03:02 b259bc72f09147250b0ffb13c729ca285747ef
+
+./.git/objects/58:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 177  Apr 29 04:22 1b16f9e07d4ba16850cf64608074cdd52fe16d
+-r-------- 1   phung001 csmajs 157  Apr 20 03:12 2aa8e4747d506b2162cee9b08bdda8c8c7bc53
+
+./.git/objects/f8:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:12 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 03:12 57dbd750cfc916e6093f0a242b95a0833a7f72
+
+./.git/objects/76:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 172  Apr 20 03:12 57f9be1b1f46d87e6f490cdab6bcd98b377f04
+-r-------- 1   phung001 csmajs 142  Apr 29 21:31 89abbf428407b172c7c26361bcd5ea3df471f4
+-r-------- 1   phung001 csmajs 153  Apr 29 04:18 cbca5f4f0658159d24290fa2dba593cc0c35f7
+
+./.git/objects/df:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 911  Apr 20 03:21 958a2c2c6ea3016bae402d085af8ab031aa2d2
+
+./.git/objects/d7:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 167  Apr 20 03:22 565a6b14d5da96594c69cbbc3aaeacab66cea6
+
+./.git/objects/01:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:28 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 908  Apr 20 03:28 d4e11e56047009b4e79d2e70bbc45939c8a7a1
+
+./.git/objects/c3:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:28 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 03:28 ebb3cd555bb369a92455774eaa03286a6cd5a2
+
+./.git/objects/52:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 1499 Apr 26 00:58 654c67a776fc4d182aa18600273081e65f1102
+-r-------- 1   phung001 csmajs 165  Apr 20 03:28 86609b4c28afc9f3c50aaf174c38ed5e3f367a
+
+./.git/objects/b2:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:30 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 908  Apr 20 03:30 03bd5334fe91257c8d7b701968a861382c6e9e
+-r-------- 1   phung001 csmajs 189  Apr 29 04:30 a71263127e103cbf4749feb88313c87e241dca
+
+./.git/objects/4a:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:30 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 166  Apr 20 03:30 fcbcaffe3021835358c8e4790344f8cd8bad74
+
+./.git/objects/dc:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:34 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 920  Apr 20 03:34 8c1974fc9455dbab0fd165f8964bd6d8c1c88d
+
+./.git/objects/e2:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:34 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 148  Apr 20 03:34 bcddb7e9a11002633147b3dbe91f2f764e2b79
+
+./.git/objects/82:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 03:34 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 167  Apr 20 03:34 8727e80521ef6c2fabd99a6b7117124a820c16
+
+./.git/objects/bc:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 904  Apr 20 04:15 0617a58b90055d8827be66d942493deaa6f473
+-r-------- 1   phung001 csmajs 211  Apr 29 04:18 cd2f2670790199b74b6bd09656a9dcd3556e41
+-r-------- 1   phung001 csmajs 174  Apr 26 01:22 d78803271097630931ed90ea2c688c824e6974
+
+./.git/objects/19:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:32 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 20 04:16 2618641aebf526863968e4fa8221075d03265a
+-r-------- 1   phung001 csmajs 141  Apr 29 06:32 95b8e72c29839567e69b940443c360ae0e1b1b
+
+./.git/objects/56:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 04:16 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 178  Apr 20 04:16 b5e2f057f9fdcd392d639c9099c65c0a3d92a5
+
+./.git/objects/ca:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:53 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 147  Apr 20 06:53 914ec62c591f5a35739aa9c6efef63d3de0d84
+-r-------- 1   phung001 csmajs 1050 Apr 20 06:35 d13ad5dadc487a9821f59a23dbcdbf88a880fe
+
+./.git/objects/fd:
+size = 20
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 149  Apr 20 06:35 35b816d71fa4acac8825c0c72d5467a40b507d
+-r-------- 1   phung001 csmajs 1424 Apr 20 06:36 aaeca262cc3c986ca3a0f531b6c1d8147a749a
+-r-------- 1   phung001 csmajs 202  Apr 20 06:52 a64929279049cc84679a1b96ad14d2694d213d
+
+./.git/objects/2e:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 160  Apr 29 04:22 a002cbc84f65c66d22af56a57563b0e882bf3f
+-r-------- 1   phung001 csmajs 942  Apr 20 06:35 e72f97e29e6841a88ae63a5ef3cc18eb7afcf7
+
+./.git/objects/89:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:37 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 57   Apr 20 06:37 032e4a8dc9c56371f8d58bde78b10098526b82
+
+./.git/objects/aa:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 115  Apr 29 04:22 4954c955adffa13a65ecc6982156d4804b40ad
+-r-------- 1   phung001 csmajs 56   Apr 20 06:37 6701892117395111945f767690124d5317e4b7
+
+./.git/objects/6e:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:37 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 175  Apr 20 06:37 a33c2e95f7e1339863f8581849fe0c03ccaea8
+
+./.git/objects/f0:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 233  Apr 20 06:52 72e7df359b5cff186e797183aafe526efb068d
+-r-------- 1   phung001 csmajs 142  Apr 29 04:18 89e60a87e35fcbb14da730bdd0d7c02e2ef460
+
+./.git/objects/57:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 210  Apr 20 06:52 ea89722e3e1db055cfcc48d4cf0a878d3f66b5
+
+./.git/objects/93:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:26 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 1761 Apr 29 04:26 0acb3d098f332b73e6e48a97c9c427347686a7
+-r-------- 1   phung001 csmajs 208  Apr 20 06:52 e3e9d4ad148b657da85a7bdd1247b6ff2aa40c
+
+./.git/objects/21:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 208  Apr 20 06:52 e36ee2a16c9f3b8918566206f8e762f80272de
+
+./.git/objects/20:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 216  Apr 20 06:52 c42550bf2c0dfb7f26c73ebc6e506f1e6a76c8
+
+./.git/objects/64:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 218  Apr 20 06:52 90c57804e5313acbdbd740e76363875fdea541
+
+./.git/objects/94:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 207  Apr 20 06:52 0d2ab3796333ef93030a0e83511b4c90784327
+
+./.git/objects/15:
+do_ypcall: clnt_call: RPC: Unable to send; errno = Operation not permitted
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 207  Apr 20 06:52 35dc61f4e330ccbfb66f80188d6b27eb64570a
+
+./.git/objects/f6:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 202  Apr 20 06:52 7e34fff08c5b537f8dad4798ab3281ed483123
+-r-------- 1   phung001 csmajs 1019 Apr 26 00:58 d23414459241a1ceaeeee5ffabb5080ca19db5
+
+./.git/objects/fb:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 232  Apr 20 06:52 b6ef5f0e15bed920399d2840b682ea0e4b001e
+
+./.git/objects/be:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 209  Apr 20 06:52 3a75391a18bac525494e108547a10a43a10078
+
+./.git/objects/3c:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:52 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 177  Apr 20 06:52 24fd29c8fb552ca1af3c8c4feb1c5da5d163be
+
+./.git/objects/4e:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 20 06:54 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 171  Apr 20 06:54 6fa3fa6d408514515661ae6e928e0a5fcbbf0d
+
+./.git/objects/fc:
+size = 8
+drwx------ 2   phung001 csmajs 4096 Apr 26 00:58 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 56   Apr 26 00:58 610eb5f40f03b72421188e611d3215da0d94b4
+
+./.git/objects/7f:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 21:31 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 1010 Apr 29 21:31 b28ea023eedb9a4a02c6e3f01f4f64cae1a03a
+-r-------- 1   phung001 csmajs 175  Apr 26 00:58 db794d974d7603776cb3de3c41300f00fb6df0
+
+./.git/objects/ae:
+size = 20
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 210  Apr 29 04:18 2e65f900a976d957ddb57ac0c694de9761edac
+-r-------- 1   phung001 csmajs 83   Apr 26 01:22 701896240d79b786205b33d03aaf64804abf41
+-r-------- 1   phung001 csmajs 177  May  2 03:21 7ba1b9f98448a03a50230381e443ba5ca41aa7
+
+./.git/objects/34:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:26 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 176  Apr 26 01:22 4a906080e2df65d7441b4726ec2879d0c491fb
+-r-------- 1   phung001 csmajs 852  Apr 29 04:26 7ecd1adcb729e525ba9d78694a56a6e32886f0
+
+./.git/objects/81:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 159  Apr 29 04:18 02bd07e5c88b9010f8edfc745536673c73ab33
+
+./.git/objects/44:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 177  Apr 29 04:18 6ac512ed6c82fbe25f3622a29125088ef3d459
+
+./.git/objects/d9:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 1377 Apr 29 04:18 1920330ff385d53d4f996652a7fb54ddca7583
+
+./.git/objects/72:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 576  Apr 29 04:18 682db08d934fb488f9bf82866315215393594e
+
+./.git/objects/da:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 177  Apr 29 04:18 45331921e3d141c2ef781c4d3574b1adcb93d4
+
+./.git/objects/af:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 848  Apr 29 04:22 c5c472ac701daba0815555977a689d0fd0fe70
+
+./.git/objects/6f:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 04:22 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 533  Apr 29 04:22 a71ff9c0f30740def5ffe97ecf6ddd50fac0bf
+
+./.git/objects/35:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:31 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 791  Apr 29 06:31 8e41e19a2d0166d96cfb80346dd00f6161ae9d
+
+./.git/objects/d2:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 06:32 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 176  Apr 29 06:32 6d5368eb168f86b969af80cc35e0bac1a194da
+
+./.git/objects/a5:
+size = 16
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 953  Apr 29 07:28 1fac6e30c47e13abc09d4b23033370c90adc32
+-r-------- 1   phung001 csmajs 212  Apr 30 03:51 8688c4a2da7af6c86705dc2cb0ca01eeacd2e3
+
+./.git/objects/61:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 07:28 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 141  Apr 29 07:28 529733a81f9bda8969d68d086f881cc6c09ebd
+
+./.git/objects/c7:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 29 07:28 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 187  Apr 29 07:28 de8a62e6813ef599f073adc7920be435f4d50f
+
+./.git/objects/92:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 212  Apr 30 03:51 a7ec2bd3a540457c641fbd6ceef0a84464695c
+
+./.git/objects/55:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 200  Apr 30 03:51 65c3d29b861b05236f4ae785742178fef95416
+
+./.git/objects/c1:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 169  Apr 30 03:51 efa1e172c8bef64b45c00fd96020209d40c6bd
+
+./.git/objects/2c:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 03:51 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 176  Apr 30 03:51 3b18fbd4bf9c2790eecc36046d29713bbaa271
+
+./.git/objects/07:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:36 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 142  Apr 30 17:36 b54ebe53485bc6a69176df979760f6556afd77
+
+./.git/objects/32:
+size = 12
+drwx------ 2   phung001 csmajs 4096 Apr 30 17:36 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 177  Apr 30 17:36 9642ccd31e02d7055891a9801d636884e69928
+
+./.git/objects/14:
+size = 12
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 2145 May  2 03:21 e8fe9eed3141addd2ad4e57a0286c4181c8f0a
+
+./.git/objects/24:
+size = 12
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 141  May  2 03:21 4c4cb1ac9f516160992b1cbb219bdce5ea7a32
+
+./.git/objects/dd:
+size = 12
+drwx------ 2   phung001 csmajs 4096 May  2 03:21 .
+drwx------ 116 phung001 csmajs 4096 May  2 03:21 ..
+-r-------- 1   phung001 csmajs 174  May  2 03:21 f775082df00e619299dbe2772b74f57de292ca
+
+./.git/logs:
+size = 24
+drwx------ 3 phung001 csmajs 4096  Apr 14 03:50 .
+drwx------ 8 phung001 csmajs 4096  May  2 03:21 ..
+-rw------- 1 phung001 csmajs 10418 May  2 03:21 HEAD
+drwx------ 4 phung001 csmajs 4096  Apr 14 23:14 refs
+
+./.git/logs/refs:
+size = 16
+drwx------ 4 phung001 csmajs 4096 Apr 14 23:14 .
+drwx------ 3 phung001 csmajs 4096 Apr 14 03:50 ..
+drwx------ 2 phung001 csmajs 4096 Apr 29 04:29 heads
+drwx------ 3 phung001 csmajs 4096 Apr 14 23:14 remotes
+
+./.git/logs/refs/heads:
+size = 20
+drwx------ 2 phung001 csmajs 4096 Apr 29 04:29 .
+drwx------ 4 phung001 csmajs 4096 Apr 14 23:14 ..
+-rw------- 1 phung001 csmajs 3268 Apr 20 06:37 exec
+-rw------- 1 phung001 csmajs 1369 May  2 03:21 ls
+-rw------- 1 phung001 csmajs 1315 Apr 29 06:32 master
+
+./.git/logs/refs/remotes:
+size = 12
+drwx------ 3 phung001 csmajs 4096 Apr 14 23:14 .
+drwx------ 4 phung001 csmajs 4096 Apr 14 23:14 ..
+drwx------ 2 phung001 csmajs 4096 Apr 29 04:18 origin
+
+./.git/logs/refs/remotes/origin:
+size = 24
+drwx------ 2 phung001 csmajs 4096 Apr 29 04:18 .
+drwx------ 3 phung001 csmajs 4096 Apr 14 23:14 ..
+-rw------- 1 phung001 csmajs 2776 Apr 20 06:52 exec
+-rw------- 1 phung001 csmajs 1082 May  2 03:22 ls
+-rw------- 1 phung001 csmajs 936  Apr 30 03:51 master
+-rw------- 1 phung001 csmajs 158  Apr 29 04:18 new
+
+./src:
+size = 140
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 .
+drwx------ 6 phung001 csmajs 4096  May  2 06:06 ..
+-rwx------ 1 phung001 csmajs 75409 May  2 03:10 a.out
+-rw------- 1 phung001 csmajs 26471 Apr 29 06:33 cp.cpp
+-rw------- 1 phung001 csmajs 7253  May  2 05:27 ls.cpp
+-rw------- 1 phung001 csmajs 4148  Apr 26 00:51 terminal.cpp
+-rw------- 1 phung001 csmajs 4875  Apr 29 06:33 timer.h
+
+./tests:
+size = 404
+drwx------ 2 phung001 csmajs 4096   May  2 06:06 .
+drwx------ 6 phung001 csmajs 4096   May  2 06:06 ..
+-rw------- 1 phung001 csmajs 327680 May  2 06:08 .nfs00000000012f2f5a00000059
+-rw------- 1 phung001 csmajs 4980   Apr 20 06:38 exec.script
+-rw------- 1 phung001 csmajs 65536  May  2 06:08 ls.script
+
+./bin:
+size = 120
+drwx------ 2 phung001 csmajs 4096  May  2 06:06 .
+drwx------ 6 phung001 csmajs 4096  May  2 06:06 ..
+-rwx------ 1 phung001 csmajs 76145 May  2 06:06 ls
+-rwx------ 1 phung001 csmajs 29907 May  2 06:06 rshell
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -Rla[K[K[K
+bin/       .git/      LICENSE    Makefile   README.md  src/       tests/     
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -
+bin/       .git/      LICENSE    Makefile   README.md  src/       tests/     
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls - - - - - - - - - - -[Ca
+[34m[47m.[0m  [34m[47m..[0m  [34m[47m.git[0m  [34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls           -a     src/
+[34m[47m.[0m  [34m[47m..[0m  [32ma.out[0m  cp.cpp[0m  ls.cpp[0m  terminal.cpp[0m  timer.h[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls -a src/ -l
+size = 140
+drwx------ 2 phung001 csmajs 4096  May  2 06:05 .
+drwx------ 6 phung001 csmajs 4096  May  2 06:06 ..
+-rwx------ 1 phung001 csmajs 75409 May  2 03:10 a.out
+-rw------- 1 phung001 csmajs 26471 Apr 29 06:33 cp.cpp
+-rw------- 1 phung001 csmajs 7253  May  2 05:27 ls.cpp
+-rw------- 1 phung001 csmajs 4148  Apr 26 00:51 terminal.cpp
+-rw------- 1 phung001 csmajs 4875  Apr 29 06:33 timer.h
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m         bin/ls      -R    bin           -l
+bin:
+size = 112
+-rwx------ 1 phung001 csmajs 76145 May  2 06:06 ls
+-rwx------ 1 phung001 csmajs 29907 May  2 06:06 rshell
+
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls `[K~
+[32massn8.asm~[0m  [32massignment8.asm~[0m  assignment7.asm~[0m  [32mASSIGN5.asm~[0m  
+[32mASSIGN4.asm~[0m  [32massn8.asm[0m  [32massn.asm~[0m  [32massignment7.asm[0m  
+[32massignment8.asm[0m  [32massn1.asm~[0m  [34mCS100[0m  [34mDownloads[0m  derp.asm[0m  [34mDesktop[0m  
+[34mDocuments[0m  [32mEX5.asm~[0m  EX1~2.ASM~[0m  [32mexer1~[0m  [32mEX4.asm~[0m  [32mEX1.asm~[0m  
+[32mEX3.asm~[0m  [32mexer5.asm~[0m  [32mexer1.asm~[0m  [32mexer2.asm~[0m  [32mexer3.asm~[0m  
+[32mexer4.asm~[0m  [32mEX2.asm~[0m  [32mlab8ex1.asm~[0m  [32mlab6ex3.asm~[0m  [32mlab7ex1.asm~[0m  
+[32mlab6ex1.asm~[0m  [32mlab6ex2.asm~[0m  [32mlab7ex2.asm~[0m  [32mlab8ex2.asm~[0m  
+[32mlab9ex1.asm~[0m  [32mlab9ex2.asm~[0m  [32mlab9ex3.asm~[0m  [34mMusic[0m  [34mPublic[0m  [34mPictures[0m  
+[34mTemplates[0m  [34mVideos[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m bin/ls ./src[K[K[K -a
+[34m[47m.[0m  [34m[47m..[0m  [34m[47m.git[0m  [34mbin[0m  LICENSE[0m  Makefile[0m  README.md[0m  [34msrc[0m  [34mtests[0m  
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (ls) [0;36m$[0m exit
+exit
+~
+phung001@hammer $ exit
+exit
+
+Script done on Fri 01 May 2015 11:17:45 PM PDT
