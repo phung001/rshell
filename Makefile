@@ -1,8 +1,10 @@
 CFlags = -Wall -Werror -ansi -pedantic
 
-all: rshell ls mv rm
+all: rshell cp ls mv rm
 
 rshell: bin/rshell 
+
+cp: bin/cp
 
 ls: bin/ls
 
@@ -15,6 +17,9 @@ bin:
 
 bin/rshell: ./src/terminal.cpp | bin
 	g++ $(CFlags) -o ./bin/rshell ./src/terminal.cpp 
+
+bin/cp: ./src/cp.cpp | bin
+	g++ $(CFlags) -o ./bin/cp ./src/cp.cpp 
 
 bin/ls: ./src/ls.cpp | bin
 	g++ $(CFlags) -std=c++11 -o ./bin/ls ./src/ls.cpp 
