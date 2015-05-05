@@ -12,14 +12,17 @@ using namespace std;
 
 void outhostname(){
 		char host[32];
-		int error;
-
-	//output login info
-		error = gethostname(host, 32);
-		if(error == -1)
-			perror("gethostname");
+		if(gethostname(host, 32) == -1){
+			perror("gethostname error");
+			exit(1);
+		}
 		else{ 
-			cout << getlogin() << '@' << host << "$ ";
+			char* login;
+			if((login = getlogin()) == NULL){
+				perror("getlogin error");
+				exit(1);
+			}
+			cout << login << '@' << host << "$ ";
 		}
 }
 
@@ -124,11 +127,6 @@ int main(int argc, char* argv[]){
 
 			char **argg = &tokenlist[0]; 
 
-//		for(unsigned int j = 0; j < tokenlist.size(); ++j)	
-//			cout << "tokenlist" << j << tokenlist.at(j) << endl;	
-
-	//		cout << "pf = " << pf << " flag = " << flag << endl;
-//		for(unsigned int j = 0; j < tokenlist.size(); ++j){	//execute loop
 		if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first) ){	
 			pf = 0;
 			if(strcmp(tokenlist.at(0), "exit") == 0)
@@ -140,35 +138,67 @@ int main(int argc, char* argv[]){
 			}
 
 			else {
-				pipe(fd);
+				if(-1 == pipe(fd)){
+					perror("Pipe fail");
+					exit(1);
+				}
 				int pid = fork();	
 				if(pid == 0){
-					close(fd[0]);
-					int check = execvp(argg[0], argg); 
+					if(-1 == close(fd[0])){
+						perror("Close fail");
+						exit(1);
+					}
+					int check = execvp(argg[0], argg);
 					if(check == -1){	
 						pf = 1;
-						write(fd[1], &pf, sizeof(pf));
-						close(fd[1]);
+						if(-1 == write(fd[1], &pf, sizeof(pf))){
+							perror("Write fail");
+							exit(1);
+						}
+						if(-1 == close(fd[1])){
+							perror("Close fail");
+							exit(1);
+						}
 						perror("execvp");
 					}
 					else{
 						pf = 0;
-						write(fd[1], &pf, sizeof(pf));
-						close(fd[1]);
+						if(-1 == write(fd[1], &pf, sizeof(pf))){
+							perror("Write fail");
+							exit(1);
+						}
+						if(-1 == close(fd[1])){
+							perror("Close fail");
+							exit(1);
+						}
 						perror("execvp");
 					}
 					exit(0);
 				}
 
 				else if(pid > 0){
-					waitpid(pid, NULL, 0);
-					close(fd[1]);
-					read(fd[0], &pf, sizeof(pf));
-					close(fd[0]);
+					if(-1 == waitpid(pid, NULL, 0)){
+						perror("Waitpid fail");
+						exit(1);
+					}
+					if(-1 == close(fd[1])){
+						perror("Close fail");
+						exit(1);
+					}
+					if(-1 == read(fd[0], &pf, sizeof(pf))){
+						perror("Read fail");
+						exit(1);
+					}
+					if(-1 == close(fd[0])){
+						perror("Close fail");
+						exit(1);
+					}
 				}
 
-				else perror("fork");
-			
+				else {
+					perror("fork");
+					exit(1);
+				}
 			}
 		}
 		first = false;

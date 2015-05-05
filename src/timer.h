@@ -33,6 +33,7 @@ int Timer::elapsedWallclockTime (double &wc)
 	wc = (this->new_wc_time.tv_sec - this->old_wc_time.tv_sec)
 		+ (this->new_wc_time.tv_usec - this->old_wc_time.tv_usec) / 1000000.0;
 	return 0;
+}
 
 int Timer::elapsedUserTime (double &ut)
 {

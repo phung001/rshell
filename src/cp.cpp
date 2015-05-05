@@ -11,39 +11,46 @@ using namespace std;
 
 void systemcall(char *filein, char *fileout, int size)
 {
-	int in=open(filein, O_RDONLY);
-	int out=open(fileout, O_WRONLY | O_CREAT);
+	int in, out;
+	if((in = open(filein, O_RDONLY)) == -1){
+		perror("Open error");
+		exit(1);
+	}
+	if((out = open(fileout, O_WRONLY | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR)) == -1){
+		perror("Open 2 error");
+		exit(1);
+	}
 	char buffer[BUFSIZ];
-	if(in == -1){
-		perror("in buffer");
-		exit(1);
-	}
-	if(out == -1){
-		perror("out buffer");
-		exit(1);
-	}
 	int good;
-	while(good=read(in,buffer,size)){
-		if(good==-1){
+
+	do{
+		if((good = read(in,buffer,size)) == -1){
 			perror("read error");
 			exit(1);
 		}
-
-		if(write(out,buffer,size)==-1){
+		if(write(out,buffer,size) == -1){
 			perror("write error");
 			exit(1);
 		}
-	}	
-	close(in);
-	close(out);
+	}while(good > 0);
 
-void checkexist(char *name)
-{
+	if(close(in) == -1){
+		perror("Close error");
+		exit(1);
+	}
+	if(close(out) == -1){
+		perror("Close 2 error");
+		exit(1);
+	}
+}
+
+void checkexist(char *name)	{
 	ifstream file(name);
 	if(file.good()){
 		cout << "file exists" << endl;
 		exit(1);
 	}
+	return;
 }
 
 void starttime(Timer &d, const string hi)
@@ -72,9 +79,8 @@ int main(int argc, char* argv[]){
 	}
 	if(argc == 3)
 	{
-
-		checkexist(out);
-		systemcall(in,out,BUFSIZ);
+		checkexist(argv[2]);
+		systemcall(argv[1],argv[2],BUFSIZ);
 	}
 	else
 	{
