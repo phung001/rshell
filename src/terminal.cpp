@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <vector>
+#include <fcntl.h>
 
 using namespace std;
 
@@ -15,7 +16,7 @@ void outhostname(){
 		if(gethostname(host, 32) == -1){
 			perror("gethostname error");
 			exit(1);
-		}
+		}	
 		else{ 
 			char* login;
 			if((login = getlogin()) == NULL){
@@ -63,41 +64,77 @@ int main(int argc, char* argv[]){
 			unsigned int here;
 			unsigned int flag = 0;		
 
-		unsigned int first_char = userinput.find_first_not_of(" \t");
-	
-		if(first_char > userinput.size()) break; 
-		userinput = trim(userinput);
+			unsigned int first_char = userinput.find_first_not_of(" \t");
+		
+			if(first_char > userinput.size()) break; 
+			userinput = trim(userinput);
 
-		if(userinput.find_first_of("#") != string::npos){
-			userinput = userinput.substr(0, userinput.find_first_of("#"));
-		}
+			if(userinput.find_first_of("#") != string::npos){
+				userinput = userinput.substr(0, userinput.find_first_of("#"));
+			}
 
-		userinput.append(" ");	
-		if(userinput.find_first_of(";&|") != string::npos){
-			here = userinput.find_first_of(";&|");
-			if(userinput.at(here) == ';'){
+			userinput.append(" ");	
+			if(userinput.find_first_of(";&|") != string::npos){
+				here = userinput.find_first_of(";&|");
+				if(userinput.at(here) == ';'){
 					flag = 3;
 					inputBlock = userinput.substr(0, here);
 					connector = userinput.substr(here, 1);
 					string rest = userinput;
 					userinput = rest.substr(here+1);
-			}	
-			else if( ((userinput.at(here) == '&') && (userinput.at(here+1) == '&'))
-					|| ( (userinput.at(here) == '|') && (userinput.at(here+1) == '|'))){
-						if(userinput.at(here) == '&')	flag = 1;
-						if(userinput.at(here) == '|')	flag = 2;
+				}	
+				else if( ((userinput.at(here) == '&') && (userinput.at(here+1) == '&'))
+						|| ( (userinput.at(here) == '|') && (userinput.at(here+1) == '|'))){
+					if(userinput.at(here) == '&')	flag = 1;
+					if(userinput.at(here) == '|')	flag = 2;
+					inputBlock = userinput.substr(0, here);
+					connector = userinput.substr(here, 2);
+					string rest = userinput;
+					userinput = rest.substr(here+2);
+				}
+				else if(userinput.at(here) == '|'){				//piping
+					flag = 4;
+					inputBlock = userinput.substr(0, here);
+					connector = userinput.substr(here, 1);
+					string rest = userinput;
+					userinput = rest.substr(here+1);
+				}
+			}
+			else if(userinput.find_first_of("<>") != string::npos){
+				here = userinput.find_first_of("<>");
+				if(userinput.at(here) == '>'){
+					if(userinput.at(here+1) == '>'){				//if ">>"
+						flag = 6;
 						inputBlock = userinput.substr(0, here);
 						connector = userinput.substr(here, 2);
 						string rest = userinput;
 						userinput = rest.substr(here+2);
+					}
+					else{											//if just ">"
+						flag = 5;
+						inputBlock = userinput.substr(0, here);
+						connector = userinput.substr(here, 1);
+						string rest = userinput;
+						userinput = rest.substr(here+1);
+					}
+				}
+				else if(userinput.at(here) == '<'){					//if just "<"
+					flag = 7;
+					inputBlock = userinput.substr(0, here);
+					connector = userinput.substr(here, 1);
+					string rest = userinput;
+					userinput = rest.substr(here+1);
+				}
+				else {
+					cout << "Error with finding io carrots" << endl;
+					exit(0);
+				}
 			}
 	
-		}
-	
-		//	cout << here;
-		//	cout << "inputBlock :" << inputBlock << "1" << endl;
-		//	cout << "connector :" << connector << "2" << endl;
-		//	cout << "userinput :" << userinput << "3" << endl;
+			cout << endl << here;
+			cout << "inputBlock :" << inputBlock << "1" << endl;
+			cout << "connector :" << connector << "2" << endl;
+			cout << "rest of userinput :" << userinput << "3" << endl << endl;
 
 
 			if(flag == 0){
@@ -127,83 +164,79 @@ int main(int argc, char* argv[]){
 
 			char **argg = &tokenlist[0]; 
 
-		if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first) ){	
-			pf = 0;
-			if(strcmp(tokenlist.at(0), "exit") == 0)
-				exit(0); 	
-		
-			if(strcmp(tokenlist.at(0), "false") == 0){
-				break;
-				pf = 1;
-			}
-
-			else {
-				if(-1 == pipe(fd)){
-					perror("Pipe fail");
-					exit(1);
+			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first) ){	
+				pf = 0;
+				if(strcmp(tokenlist.at(0), "exit") == 0)
+					exit(0); 	
+				if(strcmp(tokenlist.at(0), "false") == 0){
+					break;
+					pf = 1;
 				}
-				int pid = fork();	
-				if(pid == 0){
-					if(-1 == close(fd[0])){
-						perror("Close fail");
-						exit(1);
-					}
-					int check = execvp(argg[0], argg);
-					if(check == -1){	
-						pf = 1;
-						if(-1 == write(fd[1], &pf, sizeof(pf))){
-							perror("Write fail");
-							exit(1);
-						}
-						if(-1 == close(fd[1])){
-							perror("Close fail");
-							exit(1);
-						}
-						perror("execvp");
-					}
-					else{
-						pf = 0;
-						if(-1 == write(fd[1], &pf, sizeof(pf))){
-							perror("Write fail");
-							exit(1);
-						}
-						if(-1 == close(fd[1])){
-							perror("Close fail");
-							exit(1);
-						}
-						perror("execvp");
-					}
-					exit(0);
-				}
-
-				else if(pid > 0){
-					if(-1 == waitpid(pid, NULL, 0)){
-						perror("Waitpid fail");
-						exit(1);
-					}
-					if(-1 == close(fd[1])){
-						perror("Close fail");
-						exit(1);
-					}
-					if(-1 == read(fd[0], &pf, sizeof(pf))){
-						perror("Read fail");
-						exit(1);
-					}
-					if(-1 == close(fd[0])){
-						perror("Close fail");
-						exit(1);
-					}
-				}
-
 				else {
-					perror("fork");
-					exit(1);
+					if(-1 == pipe(fd)){
+						perror("Pipe fail");
+						exit(1);
+					}
+					int pid = fork();	
+					if(pid == 0){
+						if(-1 == close(fd[0])){
+							perror("Close fail");
+							exit(1);
+						}
+						int check = execvp(argg[0], argg);
+						if(check == -1){	
+							pf = 1;
+							if(-1 == write(fd[1], &pf, sizeof(pf))){
+								perror("Write fail");
+								exit(1);
+							}
+							if(-1 == close(fd[1])){
+								perror("Close fail");
+								exit(1);
+							}
+							perror("execvp");
+						}
+						else{
+							pf = 0;
+							if(-1 == write(fd[1], &pf, sizeof(pf))){
+								perror("Write fail");
+								exit(1);
+							}
+							if(-1 == close(fd[1])){
+								perror("Close fail");
+								exit(1);
+							}
+							perror("execvp");
+						}
+						exit(0);
+					}
+					else if(pid > 0){
+						if(-1 == waitpid(pid, NULL, 0)){
+							perror("Waitpid fail");
+							exit(1);
+						}
+						if(-1 == close(fd[1])){
+							perror("Close fail");
+							exit(1);
+						}
+						if(-1 == read(fd[0], &pf, sizeof(pf))){
+							perror("Read fail");
+							exit(1);
+						}
+						if(-1 == close(fd[0])){
+							perror("Close fail");
+							exit(1);
+						}
+					}
+					else {
+						perror("fork");
+						exit(1);
+					}
 				}
 			}
-		}
-		first = false;
-		prevflag = flag;
-		delete[] uinput;	
+			first = false;
+			prevflag = flag;
+			delete[] uinput;	
 		}
 	}
 	return 0;
