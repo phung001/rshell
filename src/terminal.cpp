@@ -131,7 +131,7 @@ int main(int argc, char* argv[]){
 				}
 			}
 	
-			cout << endl << here;
+		//	cout << endl << here;
 			cout << "inputBlock :" << inputBlock << "1" << endl;
 			cout << "connector :" << connector << "2" << endl;
 			cout << "rest of userinput :" << userinput << "3" << endl << endl;
