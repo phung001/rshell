@@ -6,6 +6,7 @@
 #include <string.h> 
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <vector>
 #include <fcntl.h>
 
@@ -49,11 +50,43 @@ string trim(string const& str){
 	return temp;
 }
 
+void redirect_in(char** outputLeft, char* inputRight){
+	int orig = dup(0);
+	if(-1 == close(0)){
+		perror("Error with redirect_in close");
+		exit(1);
+	}
+	if(open(inputRight, O_RDONLY)  == -1) perror("Error with redirect_in open");
+	else{
+		int pid = fork();
+		if(pid == 0){
+			cout << "redirect_in child ok" << endl;
+			if(-1 == execvp(outputLeft[0], outputLeft)) perror("Error with redirect_in execvp");
+			exit(1);
+		}
+		else if(pid > 0){
+			if(-1 == wait(0)){
+				perror("Error with redirect_in wait");
+				exit(1);
+			}
+		}
+		else {
+			perror("Error with redirect_in fork");
+			exit(1);
+		}
+	}
+	close(0);
+	dup2(orig, 0);
+	close(orig);
+	return;
+}
+
+
 int main(int argc, char* argv[]){
 	while(1){
 		outhostname();
 		//get input
-		string userinput, inputBlock, connector;
+		string userinput, inputBlock, connector, inputRight;
 		getline(cin, userinput);
 		unsigned int pf = 0;
 		bool first = true;
@@ -61,6 +94,7 @@ int main(int argc, char* argv[]){
 		int prevflag = 0;
 
 		while(!userinput.empty()){
+cout << '2' << userinput << '2' << endl;
 			unsigned int here;
 			unsigned int flag = 0;		
 
@@ -122,8 +156,16 @@ int main(int argc, char* argv[]){
 					flag = 7;
 					inputBlock = userinput.substr(0, here);
 					connector = userinput.substr(here, 1);
-					string rest = userinput;
-					userinput = rest.substr(here+1);
+					if(userinput.find_first_of("<>|", here+1) != string::npos){
+						int here2 = userinput.find_first_of("<>|", here+1);
+						inputRight = userinput.substr(here+1, here2-here-1);
+						string rest = userinput;
+						userinput = rest.substr(here2);
+					}
+					else{
+						inputRight = userinput.substr(here+1);
+						userinput = "";
+					}
 				}
 				else {
 					cout << "Error with finding io carrots" << endl;
@@ -134,8 +176,8 @@ int main(int argc, char* argv[]){
 		//	cout << endl << here;
 			cout << "inputBlock :" << inputBlock << "1" << endl;
 			cout << "connector :" << connector << "2" << endl;
-			cout << "rest of userinput :" << userinput << "3" << endl << endl;
-
+			cout << "rest of userinput :" << userinput << "3" << endl;
+			cout << "inputRight :" << inputRight << '4' << endl << endl;
 
 			if(flag == 0){
 				inputBlock = userinput;
@@ -164,7 +206,7 @@ int main(int argc, char* argv[]){
 
 			char **argg = &tokenlist[0]; 
 
-			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first) ){	
+			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first && !((flag == 4) ||  (flag == 5) || (flag == 6) || (flag == 7)) ) ){	
 				pf = 0;
 				if(strcmp(tokenlist.at(0), "exit") == 0)
 					exit(0); 	
@@ -234,6 +276,16 @@ int main(int argc, char* argv[]){
 					}
 				}
 			}
+				
+			else if(flag == 7){
+				inputRight = trim(inputRight);
+				char *uinputt = new char[inputRight.length() +1];	//turns string into c*
+				strcpy(uinputt, inputRight.c_str());
+				redirect_in(argg, uinputt); 
+				delete[] uinputt;
+				inputRight = "";
+			}
+
 			first = false;
 			prevflag = flag;
 			delete[] uinput;	
