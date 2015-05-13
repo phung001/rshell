@@ -50,6 +50,60 @@ string trim(string const& str){
 	return temp;
 }
 
+void exec_go(char** path){
+	int pid = fork();
+	if(pid == 0){
+		cout << "exec_go child ok" << endl;
+		if(-1 == execvp(path[0], path)) perror("Error with exec_go execvp");
+		exit(1);
+	}
+	else if(pid > 0){
+		if(-1 == wait(0)){
+			perror("Error with exec_go wait");
+			exit(1);
+		}
+	}
+	else {
+		perror("Error with exec_go fork");
+		exit(1);
+	}
+}
+
+void redirect_out(int flag, char** outputLeft, char* inputRight){
+	int orig = dup(1);
+	if(-1 == close(1)) {
+		perror("Error with redirect_out close1");
+		exit(1);
+	}
+	if(flag == 5) {
+		if (open(inputRight, O_WRONLY|O_CREAT|O_TRUNC) == -1) perror("Error with redirect_out open");
+		else{
+			//output to inputRight
+			exec_go(outputLeft);		
+		}
+	}
+	else if(flag == 6) {
+		if(open(inputRight, O_WRONLY|O_CREAT|O_APPEND) == -1) perror("Error with redirect_out open");
+		else{
+			//output to inputRight
+			exec_go(outputLeft);		
+		}
+	}
+	if(-1 == close(1)) {
+		perror("Error with redirect_out close2");
+		exit(1);
+	}
+	if(-1 == dup2(orig, 1)){
+		perror("Error with redirect_out dup2");
+		exit(1);
+	}
+	if(-1 == close(orig)) {
+		perror("Error with redirect_out close1");
+		exit(1);
+	}
+	return;
+}
+
 void redirect_in(char** outputLeft, char* inputRight){
 	int orig = dup(0);
 	if(-1 == close(0)){
@@ -58,22 +112,7 @@ void redirect_in(char** outputLeft, char* inputRight){
 	}
 	if(open(inputRight, O_RDONLY)  == -1) perror("Error with redirect_in open");
 	else{
-		int pid = fork();
-		if(pid == 0){
-			cout << "redirect_in child ok" << endl;
-			if(-1 == execvp(outputLeft[0], outputLeft)) perror("Error with redirect_in execvp");
-			exit(1);
-		}
-		else if(pid > 0){
-			if(-1 == wait(0)){
-				perror("Error with redirect_in wait");
-				exit(1);
-			}
-		}
-		else {
-			perror("Error with redirect_in fork");
-			exit(1);
-		}
+		exec_go(outputLeft);
 	}
 	close(0);
 	dup2(orig, 0);
@@ -94,9 +133,10 @@ int main(int argc, char* argv[]){
 		int prevflag = 0;
 
 		while(!userinput.empty()){
-cout << '2' << userinput << '2' << endl;
 			unsigned int here;
 			unsigned int flag = 0;		
+
+cout << "userinput: " << userinput << endl << endl; 
 
 			unsigned int first_char = userinput.find_first_not_of(" \t");
 		
@@ -141,15 +181,31 @@ cout << '2' << userinput << '2' << endl;
 						flag = 6;
 						inputBlock = userinput.substr(0, here);
 						connector = userinput.substr(here, 2);
-						string rest = userinput;
-						userinput = rest.substr(here+2);
+						if(userinput.find_first_of("<>|", here+2) != string::npos){
+							int here2 = userinput.find_first_of("<>|", here+1);
+							inputRight = userinput.substr(here+1, here2-here-1);
+							string rest = userinput;
+							userinput = rest.substr(here2);
+						}
+						else{
+							inputRight = userinput.substr(here+2);
+							userinput = "";
+						}
 					}
 					else{											//if just ">"
 						flag = 5;
 						inputBlock = userinput.substr(0, here);
 						connector = userinput.substr(here, 1);
-						string rest = userinput;
-						userinput = rest.substr(here+1);
+						if(userinput.find_first_of("<>|", here+1) != string::npos){
+							int here2 = userinput.find_first_of("<>|", here+1);
+							inputRight = userinput.substr(here+1, here2-here-1);
+							string rest = userinput;
+							userinput = rest.substr(here2);
+						}
+						else{
+						inputRight = userinput.substr(here+1);
+						userinput = "";
+						}
 					}
 				}
 				else if(userinput.at(here) == '<'){					//if just "<"
@@ -203,8 +259,9 @@ cout << '2' << userinput << '2' << endl;
 			}
 		
 			tokenlist.push_back('\0');
-
 			char **argg = &tokenlist[0]; 
+			
+	cout << "flag begin: " << flag << "  prevflag: " << prevflag << endl << endl;
 
 			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first && !((flag == 4) ||  (flag == 5) || (flag == 6) || (flag == 7)) ) ){	
 				pf = 0;
@@ -276,7 +333,16 @@ cout << '2' << userinput << '2' << endl;
 					}
 				}
 			}
-				
+			
+			else if(flag == 5 || flag == 6){
+				inputRight = trim(inputRight);
+				char *uinputt = new char[inputRight.length() +1];	//turns string into c*
+				strcpy(uinputt, inputRight.c_str());
+				redirect_out(flag, argg, uinputt); 
+				delete[] uinputt;
+				inputRight = "";
+			}
+
 			else if(flag == 7){
 				inputRight = trim(inputRight);
 				char *uinputt = new char[inputRight.length() +1];	//turns string into c*
@@ -285,7 +351,7 @@ cout << '2' << userinput << '2' << endl;
 				delete[] uinputt;
 				inputRight = "";
 			}
-
+cout << "flag end: " << flag << endl;
 			first = false;
 			prevflag = flag;
 			delete[] uinput;	
