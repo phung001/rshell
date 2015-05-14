@@ -53,8 +53,10 @@ string trim(string const& str){
 void exec_go(char** path){
 	int pid = fork();
 	if(pid == 0){
-		cout << "exec_go child ok" << endl;
-		if(-1 == execvp(path[0], path)) perror("Error with exec_go execvp");
+		if(-1 == execvp(path[0], path)){
+			cerr << "11" << path[0] << "11\n" << flush;
+			perror("Error with exec_go execvp");
+		}
 		exit(1);
 	}
 	else if(pid > 0){
@@ -69,6 +71,95 @@ void exec_go(char** path){
 	}
 }
 
+vector<char*> tokenize_go(string inputBlock){
+	//tokenize here	
+	vector<char*> tokenlist;				
+	char *token;
+
+	char *uinput = new char[inputBlock.length() +1];	//turns string into c*
+	strcpy(uinput, inputBlock.c_str());
+
+	token = strtok(uinput, " \t");				//tokenize and add to vector of char*
+	while(token != NULL){
+		tokenlist.push_back(token);
+		token = strtok(NULL, " \t");
+	}
+
+	tokenlist.push_back('\0');
+	
+//	for(unsigned int i = 0; i < tokenlist.size(); i++)
+//		cout <<'4' << tokenlist.at(i) << '3' << endl;
+	
+	//char **argg = &tokenlist[0]; 
+
+	return tokenlist;
+}
+
+void pipe_go(string outputLeft, string outputRight){
+	int orig = dup(1);
+	int orig2 = dup(0);
+	int fd[2];
+	if(-1 == pipe(fd)) {
+		perror(__FILE__ ": pipe");
+	}
+//cerr << "fd0 = " << fd[0] << endl;
+//cerr << "fd1 = " << fd[1] << endl;
+	
+	int pid = fork();
+	if(pid == 0) {
+	
+		if(-1 == close(fd[0])) perror("Error with close2");
+		if(-1 == close(1)) perror("Error with close");
+		if(-1 == dup(fd[1])) perror("Error with dup");
+		if(-1 == close(fd[1])) perror("Error with close2");
+
+		vector<char*> prog1 = tokenize_go(outputLeft);
+		char **argg = &prog1[0];
+		exec_go(argg);
+	//	if(-1 == close(fd[1])) perror("Error with close3");
+	//	if(-1 == close(fd[0])) perror("Error with close2");
+		if(-1 == dup2(orig, 1)){
+			perror("Error with redirect_out dup2");
+			exit(1);
+		}
+		if(-1 == close(orig)) {
+			perror("Error with redirect_out close1");
+			exit(1);
+		}
+		exit(0);
+	}
+	else{ 
+		if(fork() == 0){
+			if(-1 == close(fd[1])) perror("Error with close2");
+			if(-1 == close(0)) perror("Error with close");
+			if(-1 == dup(fd[0])) perror("Error with dup");
+			if(-1 == close(fd[0])) perror("Error with close2");
+
+			vector<char*> prog2 = tokenize_go(outputRight);
+			char **argg = &prog2[0];
+			exec_go(argg);
+			close(fd[0]);
+		//	if(-1 == close(fd[1])) perror("Error with close3");
+			if(-1 == dup2(orig2, 0)){
+				perror("Error with redirect_out dup2");
+				exit(1);
+			}
+			if(-1 == close(orig2)) {
+				perror("Error with redirect_out close1");
+				exit(1);
+			}
+			exit(1);
+		}
+		if(-1 == close(fd[1])) perror("Error with close4");
+		if(-1 == close(fd[0])) perror("Error with close4");
+		wait(0);
+		wait(0);
+
+	}
+
+	return;
+}
+
 void redirect_out(int flag, char** outputLeft, char* inputRight){
 	int orig = dup(1);
 	if(-1 == close(1)) {
@@ -76,22 +167,26 @@ void redirect_out(int flag, char** outputLeft, char* inputRight){
 		exit(1);
 	}
 	if(flag == 5) {
-		if (open(inputRight, O_WRONLY|O_CREAT|O_TRUNC) == -1) perror("Error with redirect_out open");
+		if (open(inputRight, O_WRONLY|O_CREAT|O_TRUNC, S_IRWXU) == -1) perror("Error with redirect_out open");
 		else{
 			//output to inputRight
-			exec_go(outputLeft);		
+			exec_go(outputLeft);
+			if(-1 == close(1)) {
+			perror("Error with redirect_out close2");
+			exit(1);
+			}
 		}
 	}
 	else if(flag == 6) {
-		if(open(inputRight, O_WRONLY|O_CREAT|O_APPEND) == -1) perror("Error with redirect_out open");
+		if(open(inputRight, O_WRONLY|O_CREAT|O_APPEND, S_IRWXU) == -1) perror("Error with redirect_out open");
 		else{
 			//output to inputRight
 			exec_go(outputLeft);		
+			if(-1 == close(1)) {
+			perror("Error with redirect_out close2");
+			exit(1);
+			}
 		}
-	}
-	if(-1 == close(1)) {
-		perror("Error with redirect_out close2");
-		exit(1);
 	}
 	if(-1 == dup2(orig, 1)){
 		perror("Error with redirect_out dup2");
@@ -113,10 +208,19 @@ void redirect_in(char** outputLeft, char* inputRight){
 	if(open(inputRight, O_RDONLY)  == -1) perror("Error with redirect_in open");
 	else{
 		exec_go(outputLeft);
+		if(-1 == close(0)) {
+			perror("Error with redirect_out close2");
+			exit(1);
+		}
 	}
-	close(0);
-	dup2(orig, 0);
-	close(orig);
+		if(-1 == dup2(orig, 0)){
+			perror("Error with redirect_out dup2");
+			exit(1);
+		}
+		if(-1 == close(orig)) {
+			perror("Error with redirect_out close1");
+			exit(1);
+		}
 	return;
 }
 
@@ -170,8 +274,16 @@ cout << "userinput: " << userinput << endl << endl;
 					flag = 4;
 					inputBlock = userinput.substr(0, here);
 					connector = userinput.substr(here, 1);
-					string rest = userinput;
-					userinput = rest.substr(here+1);
+					if(userinput.find_first_of("<>|", here+1) != string::npos){
+							int here2 = userinput.find_first_of("<>|", here+1);
+							inputRight = userinput.substr(here+1, here2-here-1);
+							string rest = userinput;
+							userinput = rest.substr(here2);
+						}
+						else{
+							inputRight = userinput.substr(here+1);
+							userinput = "";
+					}
 				}
 			}
 			else if(userinput.find_first_of("<>") != string::npos){
@@ -333,7 +445,11 @@ cout << "userinput: " << userinput << endl << endl;
 					}
 				}
 			}
-			
+			else if(flag == 4){
+				//change inputBlock and inputRight to char **... make tokenizing to a thing.. annoying..
+				//call pipe_go with these char **
+				pipe_go(inputBlock, inputRight);
+			}
 			else if(flag == 5 || flag == 6){
 				inputRight = trim(inputRight);
 				char *uinputt = new char[inputRight.length() +1];	//turns string into c*
