@@ -71,12 +71,11 @@ void exec_go(char** path){
 	}
 }
 
-vector<char*> tokenize_go(string inputBlock){
+vector<char*> tokenize_go(char* uinput, string inputBlock){
 	//tokenize here	
 	vector<char*> tokenlist;				
 	char *token;
 
-	char *uinput = new char[inputBlock.length() +1];	//turns string into c*
 	strcpy(uinput, inputBlock.c_str());
 
 	token = strtok(uinput, " \t");				//tokenize and add to vector of char*
@@ -87,17 +86,19 @@ vector<char*> tokenize_go(string inputBlock){
 
 	tokenlist.push_back('\0');
 	
-//	for(unsigned int i = 0; i < tokenlist.size(); i++)
-//		cout <<'4' << tokenlist.at(i) << '3' << endl;
-	
-	//char **argg = &tokenlist[0]; 
-
 	return tokenlist;
 }
 
 void pipe_go(string outputLeft, string outputRight){
-	int orig = dup(1);
-	int orig2 = dup(0);
+	int orig, orig2;
+	if(-1 == (orig = dup(1))) {
+		perror("Error with pipe dup");
+		exit(1);
+	}
+	if(-1 == (orig2 = dup(0))) {
+		perror("Error with pipe dup");
+		exit(1);
+	}
 	int fd[2];
 	if(-1 == pipe(fd)) {
 		perror(__FILE__ ": pipe");
@@ -106,14 +107,18 @@ void pipe_go(string outputLeft, string outputRight){
 //cerr << "fd1 = " << fd[1] << endl;
 	
 	int pid = fork();
-	if(pid == 0) {
-	
+	if(pid < 0){
+		perror("Error with pipe fork");
+		exit(1);
+	}
+	else if(pid == 0) {
+		char *uinput = new char[outputLeft.length() +1];	//turns string into c*
 		if(-1 == close(fd[0])) perror("Error with close2");
 		if(-1 == close(1)) perror("Error with close");
 		if(-1 == dup(fd[1])) perror("Error with dup");
 		if(-1 == close(fd[1])) perror("Error with close2");
 
-		vector<char*> prog1 = tokenize_go(outputLeft);
+		vector<char*> prog1 = tokenize_go(uinput, outputLeft);
 		char **argg = &prog1[0];
 		exec_go(argg);
 	//	if(-1 == close(fd[1])) perror("Error with close3");
@@ -126,19 +131,21 @@ void pipe_go(string outputLeft, string outputRight){
 			perror("Error with redirect_out close1");
 			exit(1);
 		}
+		delete [] uinput;
 		exit(0);
 	}
 	else{ 
 		if(fork() == 0){
+			char *uinput = new char[outputRight.length() +1];	//turns string into c*
 			if(-1 == close(fd[1])) perror("Error with close2");
 			if(-1 == close(0)) perror("Error with close");
 			if(-1 == dup(fd[0])) perror("Error with dup");
 			if(-1 == close(fd[0])) perror("Error with close2");
 
-			vector<char*> prog2 = tokenize_go(outputRight);
+			vector<char*> prog2 = tokenize_go(uinput, outputRight);
 			char **argg = &prog2[0];
 			exec_go(argg);
-			close(fd[0]);
+		//	close(fd[0]);
 		//	if(-1 == close(fd[1])) perror("Error with close3");
 			if(-1 == dup2(orig2, 0)){
 				perror("Error with redirect_out dup2");
@@ -148,20 +155,30 @@ void pipe_go(string outputLeft, string outputRight){
 				perror("Error with redirect_out close1");
 				exit(1);
 			}
+			delete [] uinput;
 			exit(1);
 		}
 		if(-1 == close(fd[1])) perror("Error with close4");
 		if(-1 == close(fd[0])) perror("Error with close4");
-		wait(0);
-		wait(0);
-
+		if(-1 == wait(0)){
+			perror("Error with pipe_go wait");
+			exit(1);
+		}
+		if(-1 == wait(0)){
+			perror("Error with pipe_go wait");
+			exit(1);
+		}
 	}
 
 	return;
 }
 
 void redirect_out(int flag, char** outputLeft, char* inputRight){
-	int orig = dup(1);
+	int orig;
+	if(-1 == (orig = dup(1))){
+		perror("Error with redirect_out dup");
+		exit(1);
+	}
 	if(-1 == close(1)) {
 		perror("Error with redirect_out close1");
 		exit(1);
@@ -200,7 +217,11 @@ void redirect_out(int flag, char** outputLeft, char* inputRight){
 }
 
 void redirect_in(char** outputLeft, char* inputRight){
-	int orig = dup(0);
+	int orig;
+	if(-1 == (orig = dup(0))){
+		perror("Error with redirect_out dup");
+		exit(1);
+	}
 	if(-1 == close(0)){
 		perror("Error with redirect_in close");
 		exit(1);
@@ -270,24 +291,9 @@ cout << "userinput: " << userinput << endl << endl;
 					string rest = userinput;
 					userinput = rest.substr(here+2);
 				}
-				else if(userinput.at(here) == '|'){				//piping
-					flag = 4;
-					inputBlock = userinput.substr(0, here);
-					connector = userinput.substr(here, 1);
-					if(userinput.find_first_of("<>|", here+1) != string::npos){
-							int here2 = userinput.find_first_of("<>|", here+1);
-							inputRight = userinput.substr(here+1, here2-here-1);
-							string rest = userinput;
-							userinput = rest.substr(here2);
-						}
-						else{
-							inputRight = userinput.substr(here+1);
-							userinput = "";
-					}
-				}
 			}
-			else if(userinput.find_first_of("<>") != string::npos){
-				here = userinput.find_first_of("<>");
+			if(flag == 0 && userinput.find_first_of("<>|") != string::npos){
+				here = userinput.find_first_of("<>|");
 				if(userinput.at(here) == '>'){
 					if(userinput.at(here+1) == '>'){				//if ">>"
 						flag = 6;
@@ -335,13 +341,27 @@ cout << "userinput: " << userinput << endl << endl;
 						userinput = "";
 					}
 				}
+				else if(userinput.at(here) == '|'){				//piping
+					flag = 4;
+					inputBlock = userinput.substr(0, here);
+					connector = userinput.substr(here, 1);
+					if(userinput.find_first_of("<>|", here+1) != string::npos){
+							int here2 = userinput.find_first_of("<>|", here+1);
+							inputRight = userinput.substr(here+1, here2-here-1);
+							string rest = userinput;
+							userinput = rest.substr(here2);
+					}
+					else{
+						inputRight = userinput.substr(here+1);
+						userinput = "";
+					}
+				}
 				else {
 					cout << "Error with finding io carrots" << endl;
 					exit(0);
 				}
 			}
 	
-		//	cout << endl << here;
 			cout << "inputBlock :" << inputBlock << "1" << endl;
 			cout << "connector :" << connector << "2" << endl;
 			cout << "rest of userinput :" << userinput << "3" << endl;
@@ -359,20 +379,10 @@ cout << "userinput: " << userinput << endl << endl;
 
 		//tokenize here	
 			vector<char*> tokenlist;				
-			char *token;
-	
 			char *uinput = new char[inputBlock.length() +1];	//turns string into c*
-			strcpy(uinput, inputBlock.c_str());
-
-			token = strtok(uinput, " \t");				//tokenize and add to vector of char*
-			while(token != NULL){
-				tokenlist.push_back(token);
-				token = strtok(NULL, " \t");
-			}
-		
-			tokenlist.push_back('\0');
+			tokenlist = tokenize_go(uinput, inputBlock);
 			char **argg = &tokenlist[0]; 
-			
+
 	cout << "flag begin: " << flag << "  prevflag: " << prevflag << endl << endl;
 
 			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first && !((flag == 4) ||  (flag == 5) || (flag == 6) || (flag == 7)) ) ){	
@@ -470,7 +480,7 @@ cout << "userinput: " << userinput << endl << endl;
 cout << "flag end: " << flag << endl;
 			first = false;
 			prevflag = flag;
-			delete[] uinput;	
+			delete [] uinput;
 		}
 	}
 	return 0;
