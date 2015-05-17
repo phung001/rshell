@@ -273,6 +273,8 @@ cout << "userinput: " << userinput << endl << endl;
 			}
 
 			userinput.append(" ");	
+			
+
 			if(userinput.find_first_of(";&|") != string::npos){
 				here = userinput.find_first_of(";&|");
 				if(userinput.at(here) == ';'){
@@ -292,87 +294,50 @@ cout << "userinput: " << userinput << endl << endl;
 					userinput = rest.substr(here+2);
 				}
 			}
-			if(flag == 0 && userinput.find_first_of("<>|") != string::npos){
+
+		//string test = userinput;
+			vector<string> blocks, redirs;
+			while(userinput.find_first_of("<>|") != string::npos){
 				here = userinput.find_first_of("<>|");
-				if(userinput.at(here) == '>'){
-					if(userinput.at(here+1) == '>'){				//if ">>"
-						flag = 6;
-						inputBlock = userinput.substr(0, here);
-						connector = userinput.substr(here, 2);
-						if(userinput.find_first_of("<>|", here+2) != string::npos){
-							int here2 = userinput.find_first_of("<>|", here+1);
-							inputRight = userinput.substr(here+1, here2-here-1);
-							string rest = userinput;
-							userinput = rest.substr(here2);
-						}
-						else{
-							inputRight = userinput.substr(here+2);
-							userinput = "";
-						}
-					}
-					else{											//if just ">"
-						flag = 5;
-						inputBlock = userinput.substr(0, here);
-						connector = userinput.substr(here, 1);
-						if(userinput.find_first_of("<>|", here+1) != string::npos){
-							int here2 = userinput.find_first_of("<>|", here+1);
-							inputRight = userinput.substr(here+1, here2-here-1);
-							string rest = userinput;
-							userinput = rest.substr(here2);
-						}
-						else{
-						inputRight = userinput.substr(here+1);
-						userinput = "";
-						}
-					}
+				blocks.push_back(userinput.substr(0, here));
+				if(userinput.at(here) == '>' && userinput.at(here+1) == '>'){
+					redirs.push_back(userinput.substr(here, 2));
+					string hold = userinput;
+					userinput = hold.substr(here+2);
 				}
-				else if(userinput.at(here) == '<'){					//if just "<"
-					flag = 7;
-					inputBlock = userinput.substr(0, here);
-					connector = userinput.substr(here, 1);
-					if(userinput.find_first_of("<>|", here+1) != string::npos){
-						int here2 = userinput.find_first_of("<>|", here+1);
-						inputRight = userinput.substr(here+1, here2-here-1);
-						string rest = userinput;
-						userinput = rest.substr(here2);
-					}
-					else{
-						inputRight = userinput.substr(here+1);
-						userinput = "";
-					}
-				}
-				else if(userinput.at(here) == '|'){				//piping
-					flag = 4;
-					inputBlock = userinput.substr(0, here);
-					connector = userinput.substr(here, 1);
-					if(userinput.find_first_of("<>|", here+1) != string::npos){
-							int here2 = userinput.find_first_of("<>|", here+1);
-							inputRight = userinput.substr(here+1, here2-here-1);
-							string rest = userinput;
-							userinput = rest.substr(here2);
-					}
-					else{
-						inputRight = userinput.substr(here+1);
-						userinput = "";
-					}
-				}
-				else {
-					cout << "Error with finding io carrots" << endl;
-					exit(0);
+				else{	
+					redirs.push_back(userinput.substr(here, 1));
+					string hold = userinput;
+					userinput = hold.substr(here+1);
 				}
 			}
-	
+			blocks.push_back(userinput);
+//			cout << endl;
+			for(unsigned int i = 0; i < blocks.size(); i++){
+				blocks.at(i) = trim(blocks.at(i));
+//				cout << blocks.at(i) << "!"  << endl;
+			}
+//			cout << "----------------------" << endl;
+			for(unsigned int i = 0; i < redirs.size(); i++){
+//				cout << redirs.at(i) << "!" <<  endl;
+				if(redirs.at(i) == "|") flag = 4;
+				else if(redirs.at(i) == ">") flag = 5;
+				else if(redirs.at(i) == ">>")flag = 6;
+				else if(redirs.at(i) == "<") flag = 7;
+				else cout << "ERROR with redir flags" << endl;
+			}
+/*
 			cout << "inputBlock :" << inputBlock << "1" << endl;
 			cout << "connector :" << connector << "2" << endl;
 			cout << "rest of userinput :" << userinput << "3" << endl;
 			cout << "inputRight :" << inputRight << '4' << endl << endl;
-
+*/
 			if(flag == 0){
 				inputBlock = userinput;
 				userinput = "";
 			}
 
-			if(inputBlock.empty())	{
+			if(inputBlock.empty() && flag < 4)	{
 				cout << "execvp: No such file or directory" << endl;
 				break;
 			}
@@ -383,7 +348,7 @@ cout << "userinput: " << userinput << endl << endl;
 			tokenlist = tokenize_go(uinput, inputBlock);
 			char **argg = &tokenlist[0]; 
 
-	cout << "flag begin: " << flag << "  prevflag: " << prevflag << endl << endl;
+//	cout << "flag begin: " << flag << "  prevflag: " << prevflag << endl << endl;
 
 			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first && !((flag == 4) ||  (flag == 5) || (flag == 6) || (flag == 7)) ) ){	
 				pf = 0;
@@ -458,26 +423,38 @@ cout << "userinput: " << userinput << endl << endl;
 			else if(flag == 4){
 				//change inputBlock and inputRight to char **... make tokenizing to a thing.. annoying..
 				//call pipe_go with these char **
-				pipe_go(inputBlock, inputRight);
+				pipe_go(blocks.at(0), blocks.at(1));
 			}
 			else if(flag == 5 || flag == 6){
-				inputRight = trim(inputRight);
-				char *uinputt = new char[inputRight.length() +1];	//turns string into c*
-				strcpy(uinputt, inputRight.c_str());
-				redirect_out(flag, argg, uinputt); 
+				vector<char*> tokenlist;				
+				char *uinputi = new char[blocks.at(0).length() +1];	//turns string into c*
+				tokenlist = tokenize_go(uinputi, blocks.at(0));
+				char **arggg = &tokenlist[0]; 
+
+				blocks.at(1) = trim(blocks.at(1));
+				char *uinputt = new char[blocks.at(1).length() +1];	//turns string into c*
+				strcpy(uinputt, blocks.at(1).c_str());
+				redirect_out(flag, arggg, uinputt); 
 				delete[] uinputt;
+				delete[] uinputi;
 				inputRight = "";
 			}
 
 			else if(flag == 7){
-				inputRight = trim(inputRight);
-				char *uinputt = new char[inputRight.length() +1];	//turns string into c*
-				strcpy(uinputt, inputRight.c_str());
-				redirect_in(argg, uinputt); 
+				vector<char*> tokenlist;				
+				char *uinputi = new char[blocks.at(0).length() +1];	//turns string into c*
+				tokenlist = tokenize_go(uinputi, blocks.at(0));
+				char **arggg = &tokenlist[0]; 
+
+				blocks.at(1) = trim(blocks.at(1));
+				char *uinputt = new char[blocks.at(1).length() +1];	//turns string into c*
+				strcpy(uinputt, blocks.at(1).c_str());
+				redirect_in(arggg, uinputt); 
 				delete[] uinputt;
+				delete[] uinputi;
 				inputRight = "";
 			}
-cout << "flag end: " << flag << endl;
+
 			first = false;
 			prevflag = flag;
 			delete [] uinput;
