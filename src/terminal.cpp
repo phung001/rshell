@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -184,7 +185,7 @@ void redirect_out(int flag, char** outputLeft, char* inputRight){
 		exit(1);
 	}
 	if(flag == 5) {
-		if (open(inputRight, O_WRONLY|O_CREAT|O_TRUNC, S_IRWXU) == -1) perror("Error with redirect_out open");
+		if (open(inputRight, O_WRONLY|O_CREAT|O_TRUNC, S_IRWXU) == -1) perror("Error with redirect_out open1");
 		else{
 			//output to inputRight
 			exec_go(outputLeft);
@@ -195,7 +196,7 @@ void redirect_out(int flag, char** outputLeft, char* inputRight){
 		}
 	}
 	else if(flag == 6) {
-		if(open(inputRight, O_WRONLY|O_CREAT|O_APPEND, S_IRWXU) == -1) perror("Error with redirect_out open");
+		if(open(inputRight, O_WRONLY|O_CREAT|O_APPEND, S_IRWXU) == -1) perror("Error with redirect_out open2");
 		else{
 			//output to inputRight
 			exec_go(outputLeft);		
@@ -312,20 +313,21 @@ cout << "userinput: " << userinput << endl << endl;
 				}
 			}
 			blocks.push_back(userinput);
-//			cout << endl;
+			cout << endl;
 			for(unsigned int i = 0; i < blocks.size(); i++){
 				blocks.at(i) = trim(blocks.at(i));
-//				cout << blocks.at(i) << "!"  << endl;
+				cout << i << blocks.at(i) << "!"  << endl;
 			}
-//			cout << "----------------------" << endl;
+			cout << "----------------------" << endl;
 			for(unsigned int i = 0; i < redirs.size(); i++){
-//				cout << redirs.at(i) << "!" <<  endl;
+				cout << i << redirs.at(i) << "!" <<  endl;
 				if(redirs.at(i) == "|") flag = 4;
 				else if(redirs.at(i) == ">") flag = 5;
 				else if(redirs.at(i) == ">>")flag = 6;
 				else if(redirs.at(i) == "<") flag = 7;
 				else cout << "ERROR with redir flags" << endl;
 			}
+	cout << endl;
 /*
 			cout << "inputBlock :" << inputBlock << "1" << endl;
 			cout << "connector :" << connector << "2" << endl;
@@ -420,39 +422,83 @@ cout << "userinput: " << userinput << endl << endl;
 					}
 				}
 			}
-			else if(flag == 4){
-				//change inputBlock and inputRight to char **... make tokenizing to a thing.. annoying..
-				//call pipe_go with these char **
-				pipe_go(blocks.at(0), blocks.at(1));
-			}
-			else if(flag == 5 || flag == 6){
-				vector<char*> tokenlist;				
-				char *uinputi = new char[blocks.at(0).length() +1];	//turns string into c*
-				tokenlist = tokenize_go(uinputi, blocks.at(0));
-				char **arggg = &tokenlist[0]; 
+			else if(flag >= 4){
+				int orig_in = 0;
+				bool inp = false;
+				bool pip = false;
+				if(redirs.at(0) == "<"){			//has input redirection, close stdin
+					inp = true;
+					redirs.erase(redirs.begin());
+					if(-1 == (orig_in = dup(0))){
+						perror("Error with dup");
+						exit(1);
+					}
+					if(-1 == close(0)){
+						perror("Error with close");
+						exit(1);
+					}
+					char *uinputt = new char[blocks.at(1).length() +1];	//turns string into c*
+					strcpy(uinputt, blocks.at(1).c_str());
+					if(open(uinputt, O_RDONLY) == -1) perror("Error with open");
+					delete [] uinputt;
+				}
+		//if pipe found
+		//loop for each pipe some how
+				if(find(redirs.begin(), redirs.end(), "|") != redirs.end()){
+					pip = true;
+					vector<int*> fds;
 
-				blocks.at(1) = trim(blocks.at(1));
-				char *uinputt = new char[blocks.at(1).length() +1];	//turns string into c*
-				strcpy(uinputt, blocks.at(1).c_str());
-				redirect_out(flag, arggg, uinputt); 
-				delete[] uinputt;
-				delete[] uinputi;
-				inputRight = "";
-			}
+					vector<string>::iterator iter = redirs.begin();
+					while(fds.size() < 5 && find(iter, redirs.end(), "|") != redirs.end()){
+						int *fd1 = new int[2];
+						fds.push_back(fd1);
+						redirs.erase(find(iter, redirs.end(), "|"));
+					}
 
-			else if(flag == 7){
-				vector<char*> tokenlist;				
-				char *uinputi = new char[blocks.at(0).length() +1];	//turns string into c*
-				tokenlist = tokenize_go(uinputi, blocks.at(0));
-				char **arggg = &tokenlist[0]; 
+					//pipe function - if > , you can close(1), until the end, then run redirect_out with last block
+					//				- if < , already closed(0), just close(1) until end
+					//				- if | , close(0) and close(1), follow the paper..
 
-				blocks.at(1) = trim(blocks.at(1));
-				char *uinputt = new char[blocks.at(1).length() +1];	//turns string into c*
-				strcpy(uinputt, blocks.at(1).c_str());
-				redirect_in(arggg, uinputt); 
-				delete[] uinputt;
-				delete[] uinputi;
-				inputRight = "";
+					for(unsigned int i = 0; i < fds.size(); i++){
+						//run pipe fundtion?
+					}
+
+					for(unsigned int i = 0; i < fds.size(); i++)
+						delete [] fds.at(i);
+				}
+				if(!pip){		//execvp the first block, rest are used already
+					vector<char*> toklist;				
+					char *uinputi = new char[blocks[0].size() +1];	//turns string into c*
+					toklist = tokenize_go(uinputi, blocks[0]);
+					char **arggg = &toklist[0]; 
+
+					char *uinputt = new char[blocks.at(blocks.size()-1).size() +1];	//turns string into c*
+					strcpy(uinputt, blocks.at(blocks.size()-1).c_str());
+
+					if(!(redirs.empty()) && (redirs.at(redirs.size()-1) == ">" || redirs.at(redirs.size()-1) == ">>")){
+						redirect_out(flag, arggg, uinputt);
+					}
+					else{
+						exec_go(arggg);
+					}
+					if(inp){
+						if(-1 == close(0)){
+							perror("Error with close");
+							exit(1);
+						}
+						if(-1 == dup2(orig_in, 0)){
+							perror("Error with dup2");
+							exit(1);
+						}
+						if(-1 == close(orig_in)){
+							perror("Error with close");
+							exit(1);
+						}
+					}
+					delete [] uinputi;
+					delete [] uinputt;
+				}
+				
 			}
 
 			first = false;
