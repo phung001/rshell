@@ -262,7 +262,7 @@ int main(int argc, char* argv[]){
 			unsigned int here;
 			unsigned int flag = 0;		
 
-cout << "userinput: " << userinput << endl << endl; 
+//cout << "userinput: " << userinput << endl << endl; 
 
 			unsigned int first_char = userinput.find_first_not_of(" \t");
 		
@@ -313,21 +313,21 @@ cout << "userinput: " << userinput << endl << endl;
 				}
 			}
 			blocks.push_back(userinput);
-			cout << endl;
+//			cout << endl;
 			for(unsigned int i = 0; i < blocks.size(); i++){
 				blocks.at(i) = trim(blocks.at(i));
-				cout << i << blocks.at(i) << "!"  << endl;
+//				cout << i << blocks.at(i) << "!"  << endl;
 			}
-			cout << "----------------------" << endl;
+//			cout << "----------------------" << endl;
 			for(unsigned int i = 0; i < redirs.size(); i++){
-				cout << i << redirs.at(i) << "!" <<  endl;
+//				cout << i << redirs.at(i) << "!" <<  endl;
 				if(redirs.at(i) == "|") flag = 4;
 				else if(redirs.at(i) == ">") flag = 5;
 				else if(redirs.at(i) == ">>")flag = 6;
 				else if(redirs.at(i) == "<") flag = 7;
 				else cout << "ERROR with redir flags" << endl;
 			}
-	cout << endl;
+//	cout << endl;
 /*
 			cout << "inputBlock :" << inputBlock << "1" << endl;
 			cout << "connector :" << connector << "2" << endl;
@@ -422,7 +422,10 @@ cout << "userinput: " << userinput << endl << endl;
 					}
 				}
 			}
-			else if(flag >= 4){
+			else if(flag == 4){
+				pipe_go(blocks.at(0), blocks.at(1));
+			}
+			else if(flag > 4){
 				int orig_in = 0;
 				bool inp = false;
 				bool pip = false;
@@ -445,7 +448,7 @@ cout << "userinput: " << userinput << endl << endl;
 		//if pipe found
 		//loop for each pipe some how
 				if(find(redirs.begin(), redirs.end(), "|") != redirs.end()){
-					pip = true;
+/*					pip = true;
 					vector<int*> fds;
 
 					vector<string>::iterator iter = redirs.begin();
@@ -465,6 +468,7 @@ cout << "userinput: " << userinput << endl << endl;
 
 					for(unsigned int i = 0; i < fds.size(); i++)
 						delete [] fds.at(i);
+*/
 				}
 				if(!pip){		//execvp the first block, rest are used already
 					vector<char*> toklist;				

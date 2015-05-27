@@ -1,0 +1,67 @@
+Script started on Mon 18 May 2015 12:00:50 AM PDT
+~
+phung001@hammer $ cs100
+[0;91m
+===============================================================================
+|                                                                             |
+| You have enabled settings specific for cs100.  Everything you do is being   |
+| recorded to measure your progress in the class.                             |
+|                                                                             |
+| Important commands for the class:                                           |
+|   * calcgrade.sh          displays a detailed breakdown of your grade       |
+|   * checksyscalls.sh      is your cpp file doing proper error checking?     |
+|   * typespeed             practice typing unix commands                     |
+|                                                                             |
+| Important commands for general C++ programming:                             |
+|   * make                  don't call g++ manually; let make do the work!    |
+|   * gdb                   the GNU debugger                                  |
+|   * valgrind              get rid of your memory leaks                      |
+|   * cppcheck              static analysis tool                              |
+|   * man                   find help about any syscall / terminal command    |
+|                                                                             |
+===============================================================================
+[0m
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~[0;95m [0;36m$[0m cd cs[K[KCS100/rshell/
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (redir) [0;36m$[0m ls
+bin  example  LICENSE  Makefile  README.md  src  tests
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (redir) [0;36m$[0m make
+make: Nothing to be done for `all'.
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (redir) [0;36m$[0m bin/rshell 
+phung001@hammer.cs.ucr.edu$ ls
+bin  example  LICENSE  Makefile  README.md  src  tests
+phung001@hammer.cs.ucr.edu$ ls > ex	ample1 
+phung001@hammer.cs.ucr.edu$ pwd > example1
+phung001@hammer.cs.ucr.edu$ ls
+bin  example  example1	LICENSE  Makefile  README.md  src  tests
+phung001@hammer.cs.ucr.edu$ cat < example
+bin
+example
+LICENSE
+Makefile
+README.md
+src
+tests
+phung001@hammer.cs.ucr.edu$ ls | wc
+      8       8      58
+phung001@hammer.cs.ucr.edu$ wc < example > example  2
+phung001@hammer.cs.ucr.edu$ ls
+bin  example  example1	example2  LICENSE  Makefile  README.md	src  tests
+phung001@hammer.cs.ucr.edu$ cat < example2
+ 7  7 49
+phung001@hammer.cs.ucr.edu$ pwd >> example  2
+phung001@hammer.cs.ucr.edu$ cat < example2
+ 7  7 49
+/home/csmajs/phung001/CS100/rshell
+phung001@hammer.cs.ucr.edu$ wc < ec xample >> example2
+phung001@hammer.cs.ucr.edu$ cat < example2
+ 7  7 49
+/home/csmajs/phung001/CS100/rshell
+ 7  7 49
+phung001@hammer.cs.ucr.edu$ exit
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (redir) [0;36m$[0m exit
+exit
+~
+phung001@hammer $ exit
+exit
+
+Script done on Mon 18 May 2015 12:04:27 AM PDT
