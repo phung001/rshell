@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <signal.h>
 #include <iostream>
 #include <string.h> 
 #include <sys/wait.h>
@@ -246,9 +247,36 @@ void redirect_in(char** outputLeft, char* inputRight){
 	return;
 }
 
+//bool flag_sig = false;
+
+void handle(int x){
+	//flag_sig = true;
+	cout << endl;
+}
+void handle2(int x){
+	exit(0);
+}
 
 int main(int argc, char* argv[]){
+//------- signals setup portion ---------
+	struct sigaction newact;                                                  
+	sigemptyset (&newact.sa_mask);
+	newact.sa_flags = SA_SIGINFO;
+	 
+	newact.sa_handler = handle;
+	if(-1 == sigaction (SIGINT, &newact, NULL)){
+		perror("Error with SIGINT");
+		exit(1);
+	}
+	newact.sa_handler = handle2;
+	if(-1 == sigaction (SIGTSTP, &newact, NULL)){
+		perror("Error with SIGTSTP");
+		exit(1);
+	}
+//------- signals setup portion end ---------
+
 	while(1){
+		cin.clear();
 		outhostname();
 		//get input
 		string userinput, inputBlock, connector, inputRight;
@@ -258,9 +286,9 @@ int main(int argc, char* argv[]){
 		int fd[2];
 		int prevflag = 0;
 
-		while(!userinput.empty()){
+		while(!userinput.empty()){	
 			unsigned int here;
-			unsigned int flag = 0;		
+			unsigned int flag = 0;
 
 //cout << "userinput: " << userinput << endl << endl; 
 

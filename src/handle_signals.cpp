@@ -29,7 +29,7 @@ void handle2(int x){
 
 int main(){
 
-	struct sigaction oldact, newact;
+	struct sigaction newact;
 
 	newact.sa_handler = handle;
 	sigemptyset (&newact.sa_mask);
