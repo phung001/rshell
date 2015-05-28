@@ -266,6 +266,94 @@ void handle2(int x){
 	raise(SIGSTOP);
 }
 
+void seedee(string path){
+	char* envi;
+
+	if(path == "-"){
+		if((envi = getenv("PWD")) == NULL){
+			perror("getenv error");
+			exit(1);
+		}
+		char* old_env;
+		if((old_env = getenv("OLDPWD")) == NULL){
+			perror("getenv error");
+			exit(1);
+		}
+		if(setenv("OLDPWD", envi, 1) == -1){
+			perror("setenv error");
+			exit(1);
+		}
+		if(setenv("PWD", old_env, 1) == -1){
+			perror("setenv error");
+			exit(1);
+		}
+		if(chdir(old_env) == -1){
+			perror("chdir error");
+			exit(1);
+		}
+	}
+	else{
+		if((envi = getenv("PWD")) == NULL){
+			perror("getenv error");
+			exit(1);
+		}
+		if(setenv("OLDPWD", envi, 1) == -1){
+			perror("setenv error");
+			exit(1);
+		}
+		if(path.empty()){
+			if((envi = getenv("HOME")) == NULL){
+				perror("getenv home error");
+				exit(1);
+			}
+			if(setenv("PWD", envi, 1) == -1){
+				perror("setenv home error");
+				exit(1);
+			}
+			if(chdir(envi) == -1){
+				perror("chdir error");
+				exit(1);
+			}
+		}
+		else{
+			if((envi = getenv("PWD")) == NULL){
+				perror("getenv home error");
+				exit(1);
+			}
+			string envp = envi;
+			unsigned a = path.find_last_of("/");
+			while((a+1 == path.length())){
+				path = path.substr(0,a);
+				a = path.find_last_of("/");
+			}
+
+			if(path == "."){}
+			else if(path == ".."){
+				int b = envp.find_last_of("/");
+				envp = envp.substr(0,b);
+			}
+			else{
+				envp.append("/");
+				envp.append(path);
+			}
+			char *uinputt = new char[envp.length() +1];	//turns string into c*
+			strcpy(uinputt, envp.c_str());
+		
+			if(chdir(uinputt) == -1){
+				perror("chdir error");
+			}
+			else{
+				if(setenv("PWD", uinputt, 1) == -1){
+					perror("setenv home error");
+					exit(1);
+				}
+			}
+			delete [] uinputt;
+		}
+	}
+	
+}
+
 int main(int argc, char* argv[]){
 //------- signals setup portion ---------
 	struct sigaction newact;                                                  
@@ -312,8 +400,16 @@ int main(int argc, char* argv[]){
 
 			userinput.append(" ");	
 			
-
-			if(userinput.find_first_of(";&|") != string::npos){
+			if(userinput.find("cd") == 0){
+				userinput = userinput.substr(2);
+				if(!userinput.empty() && (userinput.find_first_not_of(" \t") != string::npos))
+					userinput = trim(userinput);
+				else userinput = "";
+				seedee(userinput);
+				flag = 8;
+				userinput = "";
+			}
+			else if(userinput.find_first_of(";&|") != string::npos){
 				here = userinput.find_first_of(";&|");
 				if(userinput.at(here) == ';'){
 					flag = 3;
@@ -389,7 +485,7 @@ int main(int argc, char* argv[]){
 
 //	cout << "flag begin: " << flag << "  prevflag: " << prevflag << endl << endl;
 
-			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first && !((flag == 4) ||  (flag == 5) || (flag == 6) || (flag == 7)) ) ){	
+			if( ((pf == 0) && (prevflag == 1)) || ((pf == 1) && (prevflag == 2)) || (prevflag == 3) || (first && !((flag == 4) ||  (flag == 5) || (flag == 6) || (flag == 7) || (flag == 8)) ) ){	
 				pf = 0;
 				if(strcmp(tokenlist.at(0), "exit") == 0)
 					exit(0); 	
@@ -470,7 +566,7 @@ int main(int argc, char* argv[]){
 			else if(flag == 4){
 				pipe_go(blocks.at(0), blocks.at(1));
 			}
-			else if(flag > 4){
+			else if(flag > 4 && flag != 8){
 				int orig_in = 0;
 				bool inp = false;
 				bool pip = false;
