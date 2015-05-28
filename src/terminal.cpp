@@ -21,12 +21,24 @@ void outhostname(){
 			exit(1);
 		}	
 		else{ 
+			char* envi;
+			if((envi = getenv("PWD")) == NULL){
+				perror("getenv error");
+				exit(1);
+			}
+			char* envi_prime;
+			if((envi_prime = getenv("HOME")) == NULL){
+				perror("getenv error");
+				exit(1);
+			}
+			string envi_out = envi;
+			envi_out = envi_out.substr(strlen(envi_prime));
 			char* login;
 			if((login = getlogin()) == NULL){
 				perror("getlogin error");
 				exit(1);
 			}
-			cout << login << '@' << host << "$ ";
+			cout << login << '@' << host << ":~" << envi_out << " $ ";
 		}
 }
 
@@ -247,14 +259,11 @@ void redirect_in(char** outputLeft, char* inputRight){
 	return;
 }
 
-//bool flag_sig = false;
-
 void handle(int x){
-	//flag_sig = true;
 	cout << endl;
 }
 void handle2(int x){
-	exit(0);
+	raise(SIGSTOP);
 }
 
 int main(int argc, char* argv[]){
@@ -262,7 +271,7 @@ int main(int argc, char* argv[]){
 	struct sigaction newact;                                                  
 	sigemptyset (&newact.sa_mask);
 	newact.sa_flags = SA_SIGINFO;
-	 
+ 
 	newact.sa_handler = handle;
 	if(-1 == sigaction (SIGINT, &newact, NULL)){
 		perror("Error with SIGINT");
@@ -427,11 +436,19 @@ int main(int argc, char* argv[]){
 						exit(0);
 					}
 					else if(pid > 0){
-						if(-1 == waitpid(pid, NULL, 0)){
+						int wpid;
+						do{
+							wpid = waitpid(pid, NULL, 0);
+						}while(wpid == -1 && errno == EINTR);
+						if(wpid == -1){
+							perror("wait error");
+							exit(1);
+						}
+/*						if(-1 == waitpid(pid, NULL, 0)){
 							perror("Waitpid fail");
 							exit(1);
 						}
-						if(-1 == close(fd[1])){
+*/						if(-1 == close(fd[1])){
 							perror("Close fail");
 							exit(1);
 						}
