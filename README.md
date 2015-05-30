@@ -37,6 +37,24 @@ For example:
 The `ls` will run and return true. Since the connector is an `||`, `pwd` will not run,
 but the next command, `ps`, will. 
 
+####Piping and Redirecting
+You are also able to redirect and pipe your outputs and inputs together.
+Some examples would be :
+
+	wc < file1
+	ls > file1
+	wc < file1 > file2
+	ls > wc
+
+####CD
+The `cd` command is also supported.
+You are able to traverse the directories as you please and are able to chain them together like so:
+
+	cd one/two/three/
+
+Both `./` and `../` are supported.
+If you do not type in anything after `cd`, it will take you to your primary directory.
+
 ####Whitespace
 	
 Inserting whitespace anywhere around your commands will still compile and will only 

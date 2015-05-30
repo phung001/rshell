@@ -14,6 +14,7 @@
 
 using namespace std;
 
+pid_t pid_c = 0;
 void outhostname(){
 		char host[32];
 		if(gethostname(host, 32) == -1){
@@ -71,6 +72,7 @@ string trim(string const& str){
 
 void exec_go(char** path){
 	int pid = fork();
+	pid_c = pid;
 	if(pid == 0){
 		if(-1 == execvp(path[0], path)){
 			cerr << "11" << path[0] << "11\n" << flush;
@@ -126,6 +128,7 @@ void pipe_go(string outputLeft, string outputRight){
 //cerr << "fd1 = " << fd[1] << endl;
 	
 	int pid = fork();
+	pid_c = pid;
 	if(pid < 0){
 		perror("Error with pipe fork");
 		exit(1);
@@ -268,33 +271,17 @@ void handle(int x){
 	cout << endl;
 }
 void handle2(int x){
-	raise(SIGSTOP);
+	if(pid_c != 0){
+		if(kill(pid_c, SIGSTOP) == -1){
+			perror("Kill error");
+		}
+		cout << "Stopped process" << endl;
+	}
+	else cout << endl;
 }
 
-string trim_slash(string path){
-	
-	if(path.find_first_of("/") == 0){
-		path = path.substr(path.find_first_not_of("/"));
-	}
-
-	if(path.find_last_of("/")+1 == path.length()){
-		path = path.substr(0, path.find_last_not_of("/")+1);
-	}
-
-	unsigned a = path.find_first_of("/");
-	if(path.at(a+1) == '/'){
-		string path_temp = path;
-		path = path_temp.substr(0, a+1);
-		path_temp = path_temp.substr(a);
-		path.append(path_temp.substr(path_temp.find_first_not_of("/")));
-	}
-
-	return path;
-}
-
-void seedee(string path){
+bool seedee(string path){
 	char* envi;
-
 	if(path == "-"){
 		if((envi = getenv("PWD")) == NULL){
 			perror("getenv error");
@@ -341,13 +328,31 @@ void seedee(string path){
 				exit(1);
 			}
 		}
+		else if(path.at(0) == '/'){
+			/*
+			char *uinputt = new char[path.length() +1];	//turns string into c*
+			strcpy(uinputt, path.c_str());
+			uinputt[path.length() +1] = '\0';
+			*/
+			if(chdir(path.c_str()) == -1){
+				perror("chdir error");
+				return false;
+			}
+			else{
+				if(setenv("PWD", path.c_str(), 1) == -1){
+					perror("setenv home error");
+					exit(1);
+				}
+			}
+//			delete [] uinputt;
+			return true;
+		}
 		else{
 			if((envi = getenv("PWD")) == NULL){
 				perror("getenv home error");
 				exit(1);
 			}
 			string envp = envi;
-	//		path = trim_slash(path);
 
 			if(path == "."){}
 			else if(path == ".."){
@@ -359,28 +364,6 @@ void seedee(string path){
 				envp.append(path);
 			}
 
-/*			string temp = envp;	
-
-			while((a = envp.find("..")) <= envp.size()){
-				if(envp.at(a-2) == '.'){
-					envp = temp.substr(0, a-3) 
-				}
-				cout << envp.at(a-2) << endl;
-			*/	
-/*				envp = envp.substr(0, envp.find_last_of("/", a-2));
-				envp += temp.substr(a+2);
-				temp = envp;
-			}*/ /*	
-			while((a = envp.rfind(".")) <= envp.size()){
-		//		if((a+1 != envp.length()) && (envp.at(a+1) != '.')){
-					envp = envp.substr(0, a-1);
-					cout << envp << endl;
-					envp += temp.substr(a+1);
-					cout << envp << endl;
-					temp = envp;
-		//		}
-			}
-*/ 
 			char *uinputt = new char[envp.length() +1];	//turns string into c*
 			strcpy(uinputt, envp.c_str());
 		
@@ -396,7 +379,7 @@ void seedee(string path){
 			delete [] uinputt;
 		}
 	}
-	
+	return true;
 }
 
 int main(int argc, char* argv[]){
@@ -445,7 +428,27 @@ int main(int argc, char* argv[]){
 
 			userinput.append(" ");	
 			
-			if(userinput.find("cd") == 0){
+			if(userinput.find("bg") == 0){
+				if(pid_c != 0){
+					if(kill(pid_c, SIGCONT) == -1)
+						perror("Kill CONT ERROR");
+					pid_c = 0;
+				}
+				else {
+					cout << "Error: no processes found" << endl;
+				}
+			}
+			if(userinput.find("fg") == 0){
+				if(pid_c != 0){
+					if(kill(pid_c, SIGCONT) == -1)
+						perror("Kill CONT ERROR");
+				}
+				else{
+					cout << "Error: no processes found" << endl;
+				}
+			}
+
+			else if(userinput.find("cd") == 0){
 				userinput = userinput.substr(2);
 				if(!userinput.empty() && (userinput.find_first_not_of(" \t") != string::npos))
 					userinput = trim(userinput);
@@ -473,7 +476,6 @@ int main(int argc, char* argv[]){
 					userinput = rest.substr(here+2);
 				}
 			}
-
 		//string test = userinput;
 			vector<string> blocks, redirs;
 			while(userinput.find_first_of("<>|") != string::npos){
@@ -543,7 +545,8 @@ int main(int argc, char* argv[]){
 						perror("Pipe fail");
 						exit(1);
 					}
-					int pid = fork();	
+					int pid = fork();
+					pid_c = pid;
 					if(pid == 0){
 						if(-1 == close(fd[0])){
 							perror("Close fail");
