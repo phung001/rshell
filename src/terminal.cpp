@@ -26,12 +26,17 @@ void outhostname(){
 				perror("getenv error");
 				exit(1);
 			}
+			char cwd[1024];
+			if(getcwd(cwd, sizeof(cwd)) == NULL){
+				perror("getcwd error");
+				exit(1);
+			}
 			char* envi_prime;
 			if((envi_prime = getenv("HOME")) == NULL){
 				perror("getenv error");
 				exit(1);
 			}
-			string envi_out = envi;
+			string envi_out = cwd;
 			envi_out = envi_out.substr(strlen(envi_prime));
 			char* login;
 			if((login = getlogin()) == NULL){
@@ -266,6 +271,27 @@ void handle2(int x){
 	raise(SIGSTOP);
 }
 
+string trim_slash(string path){
+	
+	if(path.find_first_of("/") == 0){
+		path = path.substr(path.find_first_not_of("/"));
+	}
+
+	if(path.find_last_of("/")+1 == path.length()){
+		path = path.substr(0, path.find_last_not_of("/")+1);
+	}
+
+	unsigned a = path.find_first_of("/");
+	if(path.at(a+1) == '/'){
+		string path_temp = path;
+		path = path_temp.substr(0, a+1);
+		path_temp = path_temp.substr(a);
+		path.append(path_temp.substr(path_temp.find_first_not_of("/")));
+	}
+
+	return path;
+}
+
 void seedee(string path){
 	char* envi;
 
@@ -321,11 +347,7 @@ void seedee(string path){
 				exit(1);
 			}
 			string envp = envi;
-			unsigned a = path.find_last_of("/");
-			while((a+1 == path.length())){
-				path = path.substr(0,a);
-				a = path.find_last_of("/");
-			}
+	//		path = trim_slash(path);
 
 			if(path == "."){}
 			else if(path == ".."){
@@ -336,6 +358,29 @@ void seedee(string path){
 				envp.append("/");
 				envp.append(path);
 			}
+
+/*			string temp = envp;	
+
+			while((a = envp.find("..")) <= envp.size()){
+				if(envp.at(a-2) == '.'){
+					envp = temp.substr(0, a-3) 
+				}
+				cout << envp.at(a-2) << endl;
+			*/	
+/*				envp = envp.substr(0, envp.find_last_of("/", a-2));
+				envp += temp.substr(a+2);
+				temp = envp;
+			}*/ /*	
+			while((a = envp.rfind(".")) <= envp.size()){
+		//		if((a+1 != envp.length()) && (envp.at(a+1) != '.')){
+					envp = envp.substr(0, a-1);
+					cout << envp << endl;
+					envp += temp.substr(a+1);
+					cout << envp << endl;
+					temp = envp;
+		//		}
+			}
+*/ 
 			char *uinputt = new char[envp.length() +1];	//turns string into c*
 			strcpy(uinputt, envp.c_str());
 		
