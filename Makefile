@@ -31,5 +31,5 @@ bin/rm: ./src/rm.cpp | bin
 	g++ $(CFLAGS) -o ./bin/rm ./src/rm.cpp
 
 clean: 
-	rm -rf /bin
+	rm -rf ./bin
 
