@@ -16,7 +16,7 @@ bin:
 	mkdir bin
 
 bin/rshell: ./src/terminal.cpp | bin
-	g++ $(CFlags) -o ./bin/rshell ./src/terminal.cpp 
+	g++ $(CFlags) -o ./bin/rshell ./src/rshell.cpp 
 
 bin/cp: ./src/cp.cpp | bin
 	g++ $(CFlags) -o ./bin/cp ./src/cp.cpp 
