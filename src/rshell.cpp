@@ -66,6 +66,7 @@ int main(int argc, char* argv[]){
 		userinput = trim(userinput);
 
 		if(userinput.find_first_of("#") != string::npos){
+			if(userinput.find_first_of("#") == 0) break; 
 			userinput = userinput.substr(0, userinput.find_first_of("#"));
 		}
 
@@ -102,7 +103,7 @@ int main(int argc, char* argv[]){
 				userinput = "";
 			}
 
-			if(inputBlock.empty())	{
+			if(inputBlock.empty() && flag < 4)	{
 				cout << "execvp: No such file or directory" << endl;
 				break;
 			}

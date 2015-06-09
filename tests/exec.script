@@ -1,116 +1,176 @@
-Script started on Sun 19 Apr 2015 11:20:46 PM PDT
+Script started on Tue 09 Jun 2015 01:32:04 AM PDT
 ~
-phung001@hammer $ cd CS100/m[Krshell/
-~/CS100/rshell
-phung001@hammer $ make
+phung001@hammer $ cd[Ks`[K100
+[0;91m
+===============================================================================
+|                                                                             |
+| You have enabled settings specific for cs100.  Everything you do is being   |
+| recorded to measure your progress in the class.                             |
+|                                                                             |
+| Important commands for the class:                                           |
+|   * calcgrade.sh          displays a detailed breakdown of your grade       |
+|   * checksyscalls.sh      is your cpp file doing proper error checking?     |
+|   * typespeed             practice typing unix commands                     |
+|                                                                             |
+| Important commands for general C++ programming:                             |
+|   * make                  don't call g++ manually; let make do the work!    |
+|   * gdb                   the GNU debugger                                  |
+|   * valgrind              get rid of your memory leaks                      |
+|   * cppcheck              static analysis tool                              |
+|   * man                   find help about any syscall / terminal command    |
+|                                                                             |
+===============================================================================
+[0m
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~[0;95m [0;36m$[0m cd CS100/rshell/
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m make clean
+rm -rf ./bin
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m make
 mkdir bin
-g++ -Wall -Werror -ansi -pedantic -o ./bin/rshell ./src/terminal.cpp 
-~/CS100/rshell
-phung001@hammer $ bin/rshell 
-phung001@hammer.cs.ucr.edu$ ls  
+g++ -Wall -Werror -ansi -pedantic -o ./bin/rshell ./src/rshell.cpp 
+g++ -Wall -Werror -ansi -pedantic -o ./bin/cp ./src/cp.cpp 
+g++ -Wall -Werror -ansi -pedantic -std=c++11 -o ./bin/ls ./src/ls.cpp 
+g++  -o ./bin/mv ./src/mv.cpp
+g++  -o ./bin/rm ./src/rm.cpp
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m bin/rshell
+phung001@hammer.cs.ucr.edu$ ls
 bin  LICENSE  Makefile	README.md  src	tests
-phung001@hammer.cs.ucr.edu$ ls -a -l
+phung001@hammer.cs.ucr.edu$ ls -al
 total 52
-drwx------ 6 phung001 csmajs  4096 Apr 19 23:15 .
-drwx------ 6 phung001 csmajs  4096 Apr 13 20:50 ..
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
-drwx------ 8 phung001 csmajs  4096 Apr 19 22:30 .git
+drwx------ 6 phung001 csmajs  4096 Jun  9 01:25 .
+drwx------ 7 phung001 csmajs  4096 Jun  9 00:04 ..
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:25 bin
+drwx------ 8 phung001 csmajs  4096 Jun  9 00:57 .git
 -rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
--rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
--rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
-phung001@hammer.cs.ucr.edu$ ls -a - l  l -g -   f -g t -t -i -sm  -m -q -n -C  
+-rw------- 1 phung001 csmajs   548 Jun  9 00:57 Makefile
+-rw------- 1 phung001 csmajs  3094 Jun  9 00:56 README.md
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:20 src
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:24 tests
+phung001@hammer.cs.ucr.edu$ ls -a -l -g -f -t -i -s -m -q -n -C
 total 52
-11166317  4 bin    11365726  4 src	   7645853  4 .git
- 7645852  4 .	   11166318  4 README.md  23630251 20 LICENSE
-19869528  4 tests   8732797  4 Makefile   15563585  4 ..
-phung001@hammer.cs.ucr.edu$ /bin    bin/r	shell
+ 8058815  4 bin  19869528  4 tests   7645853  4 .git	  12303787  4 README.md  23630251 20 LICENSE
+ 7645852  4 .	  9313174  4 src    12303788  4 Makefile  15563585  4 ..
+phung001@hammer.cs.ucr.edu$ bin/rshell
 phung001@hammer.cs.ucr.edu$ ps
   PID TTY          TIME CMD
- 5615 pts/87   00:00:00 bash
- 5761 pts/87   00:00:00 rshell
- 6044 pts/87   00:00:00 rshell
- 6045 pts/87   00:00:00 ps
+16672 pts/22   00:00:00 bash
+16756 pts/22   00:00:00 rshell
+16799 pts/22   00:00:00 rshell
+16800 pts/22   00:00:00 ps
 phung001@hammer.cs.ucr.edu$ exit
 phung001@hammer.cs.ucr.edu$ ps
   PID TTY          TIME CMD
- 5615 pts/87   00:00:00 bash
- 5761 pts/87   00:00:00 rshell
- 6067 pts/87   00:00:00 ps
-phung001@hammer.cs.ucr.edu$ wrong command
+16672 pts/22   00:00:00 bash
+16756 pts/22   00:00:00 rshell
+16814 pts/22   00:00:00 ps
+phung001@hammer.cs.ucr.edu$ wrong
 execvp: No such file or directory
-phung001@hammer.cs.ucr.edu$ ls 		-a  -l		-C  
+phung001@hammer.cs.ucr.edu$ 		ls   -a		  ls  -s l
 total 52
-drwx------ 6 phung001 csmajs  4096 Apr 19 23:15 .
-drwx------ 6 phung001 csmajs  4096 Apr 13 20:50 ..
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
-drwx------ 8 phung001 csmajs  4096 Apr 19 22:30 .git
+drwx------ 6 phung001 csmajs  4096 Jun  9 01:25 .
+drwx------ 7 phung001 csmajs  4096 Jun  9 00:04 ..
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:25 bin
+drwx------ 8 phung001 csmajs  4096 Jun  9 00:57 .git
 -rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
--rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
--rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
+-rw------- 1 phung001 csmajs   548 Jun  9 00:57 Makefile
+-rw------- 1 phung001 csmajs  3094 Jun  9 00:56 README.md
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:20 src
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:24 tests
 phung001@hammer.cs.ucr.edu$ ls ; pwd
 bin  LICENSE  Makefile	README.md  src	tests
 /home/csmajs/phung001/CS100/rshell
-phung001@hammer.cs.ucr.edu$ ls ; awda    asdasd
+phung001@hammer.cs.ucr.edu$ ls ; wrnon   ong
 bin  LICENSE  Makefile	README.md  src	tests
 execvp: No such file or directory
 phung001@hammer.cs.ucr.edu$ ls && pwd
 bin  LICENSE  Makefile	README.md  src	tests
 /home/csmajs/phung001/CS100/rshell
-phung001@hammer.cs.ucr.edu$ ls && awdasd
+phung001@hammer.cs.ucr.edu$ ls && wrong
 bin  LICENSE  Makefile	README.md  src	tests
 execvp: No such file or directory
-phung001@hammer.cs.ucr.edu$ asdasd && ls
+phung001@hammer.cs.ucr.edu$ wrong && ls
 execvp: No such file or directory
-phung001@hammer.cs.ucr.edu$ ls || asdasd
+phung001@hammer.cs.ucr.edu$ ls || pwd
 bin  LICENSE  Makefile	README.md  src	tests
-phung001@hammer.cs.ucr.edu$ asdasd || ls
+phung001@hammer.cs.ucr.edu$ ls || wrong
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ wrong || ls
 execvp: No such file or directory
 bin  LICENSE  Makefile	README.md  src	tests
-phung001@hammer.cs.ucr.edu$ ls ; pwd && ls-    -a || ps ; exi   ls
+phung001@hammer.cs.ucr.edu$ ls ; pwd || ls && pwd ; pwd   ls ||  && pwd || ls ; pwd && ls
 bin  LICENSE  Makefile	README.md  src	tests
 /home/csmajs/phung001/CS100/rshell
-.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
-bin  LICENSE  Makefile	README.md  src	tests
-phung001@hammer.cs.ucr.edu$ ls || pw s && pwd ; ls -a
+/home/csmajs/phung001/CS100/rshell
 bin  LICENSE  Makefile	README.md  src	tests
 /home/csmajs/phung001/CS100/rshell
-.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
-phung001@hammer.cs.ucr.edu$ pwd || ; ps           ls -l||pwd
+/home/csmajs/phung001/CS100/rshell
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ ls || ps || ps  pwd ; ls           && pwd ; ps && ls || ps
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/phung001/CS100/rshell
+  PID TTY          TIME CMD
+16672 pts/22   00:00:00 bash
+16756 pts/22   00:00:00 rshell
+17188 pts/22   00:00:00 ps
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ ls ; pwd        ps ; ls||ps&&   &&     pwd              		; ls ||pwd
+  PID TTY          TIME CMD
+16672 pts/22   00:00:00 bash
+16756 pts/22   00:00:00 rshell
+17228 pts/22   00:00:00 ps
+bin  LICENSE  Makefile	README.md  src	tests
+/home/csmajs/phung001/CS100/rshell
+bin  LICENSE  Makefile	README.md  src	tests
+phung001@hammer.cs.ucr.edu$ ls -l||pwd
 total 40
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:25 bin
 -rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
--rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
--rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
+-rw------- 1 phung001 csmajs   548 Jun  9 00:57 Makefile
+-rw------- 1 phung001 csmajs  3094 Jun  9 00:56 README.md
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:20 src
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:24 tests
 phung001@hammer.cs.ucr.edu$ exit
-~/CS100/rshell
-phung001@hammer $ bin/rshell
-phung001@hammer.cs.ucr.edu$ exit param param
-~/CS100/rshell
-phung001@hammer $ bin [K/rshelll[K
-phung001@hammer.cs.ucr.edu$ ls -l exit
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m ps
+  PID TTY          TIME CMD
+16672 pts/22   00:00:00 bash
+17311 pts/22   00:00:00 ps
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m bin/rshell
+phung001@hammer.cs.ucr.edu$ exit parameter
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m ps
+  PID TTY          TIME CMD
+16672 pts/22   00:00:00 bash
+17326 pts/22   00:00:00 ps
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m bin/rshell
+phung001@hammer.cs.ucr.edu$ ls exit
 ls: cannot access exit: No such file or directory
-phung001@hammer.cs.ucr.edu$ ls -a #comment
-.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
-phung001@hammer.cs.ucr.edu$ #comment by itself
-Error! Syntax error, try again.
-phung001@hammer.cs.ucr.edu$ ls -l#  comment
+phung001@hammer.cs.ucr.edu$ ls ; exit
+bin  LICENSE  Makefile	README.md  src	tests
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m ps
+  PID TTY          TIME CMD
+16672 pts/22   00:00:00 bash
+17344 pts/22   00:00:00 ps
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m bin/rshell
+phung001@hammer.cs.ucr.edu$ ls -l # comm     comment
 total 40
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 bin
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:25 bin
 -rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
--rw------- 1 phung001 csmajs   202 Apr 19 22:39 Makefile
--rw------- 1 phung001 csmajs  1806 Apr 19 22:58 README.md
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:14 src
-drwx------ 2 phung001 csmajs  4096 Apr 19 23:15 tests
-phung001@hammer.cs.ucr.edu$ ls -a; exit
-.  ..  bin  .git  LICENSE  Makefile  README.md	src  tests
-~/CS100/rshell
-phung001@hammer $ exit[K[K[K[Kexit
+-rw------- 1 phung001 csmajs   548 Jun  9 00:57 Makefile
+-rw------- 1 phung001 csmajs  3094 Jun  9 00:56 README.md
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:20 src
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:24 tests
+phung001@hammer.cs.ucr.edu$ #comment
+phung001@hammer.cs.ucr.edu$ ls -l#comment
+total 40
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:25 bin
+-rw------- 1 phung001 csmajs 18047 Apr 13 20:50 LICENSE
+-rw------- 1 phung001 csmajs   548 Jun  9 00:57 Makefile
+-rw------- 1 phung001 csmajs  3094 Jun  9 00:56 README.md
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:20 src
+drwx------ 2 phung001 csmajs  4096 Jun  9 01:24 tests
+phung001@hammer.cs.ucr.edu$ exit
+[s%%%%%%%%%%[u[0;32mphung001[0;36m@[0;32mcs100[0;36m:[0;32m~/CS100/rshell[0;95m (master) [0;36m$[0m exit
+exit
+~
+phung001@hammer $ exit
 exit
 
-Script done on Sun 19 Apr 2015 11:39:44 PM PDT
+Script done on Tue 09 Jun 2015 01:39:32 AM PDT
